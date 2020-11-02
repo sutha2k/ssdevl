@@ -1,0 +1,11 @@
+{
+  "packageDirectories": [
+    {
+      "path": "core",
+      "default": true
+    }
+  ],
+  "namespace": "ssdevl",
+  "sfdcLoginUrl": "https://login.salesforce.com",
+  "sourceApiVersion": "49.0"
+}
