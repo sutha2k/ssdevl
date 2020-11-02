@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CoreTriggerManagerClass__c</fullName>
+    <description>Trigger Manager Core Class Name used to instanciate dynamically default one or project specific one</description>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <inlineHelpText>prefix your class name with &quot;local.&quot; if not using default one.</inlineHelpText>
+    <label>Core Trigger Manager Class</label>
+    <length>255</length>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>
