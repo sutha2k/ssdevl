@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Profile xmlns="http://soap.sforce.com/2006/04/metadata">
+    <classAccesses>
+        <apexClass>APC000_CoreSetting</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>APC000_CoreSetting_TEST</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>WRP000_DMLResult</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
     <custom>true</custom>
     <fieldPermissions>
         <editable>false</editable>
@@ -46,6 +58,9 @@
     </layoutAssignments>
     <layoutAssignments>
         <layout>ProcessBuilder__mdt-Process Builder Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>SampleForTest__c-Sample For Test Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
         <layout>ValidationRule__mdt-Validation Rule Layout</layout>
