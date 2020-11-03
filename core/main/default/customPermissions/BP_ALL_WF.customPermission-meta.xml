@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomPermission xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Assign this custom permission to bypass all triggers all workflow rules</description>
+    <label>BP_ALL_WF</label>
+</CustomPermission>
