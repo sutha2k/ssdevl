@@ -31,8 +31,24 @@
         <field>CoreSetting__mdt.WithSecurityEnforced__c</field>
         <readable>false</readable>
     </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>ProcessBuilder__mdt.Countries__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>ValidationRule__mdt.Countries__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
     <layoutAssignments>
         <layout>CoreSetting__mdt-Core Setting Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ProcessBuilder__mdt-Process Builder Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ValidationRule__mdt-Validation Rule Layout</layout>
     </layoutAssignments>
     <userLicense>Salesforce</userLicense>
     <userPermissions>
