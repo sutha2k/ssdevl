@@ -32,11 +32,11 @@
     </values>
     <values>
         <field>SobjectInfoSessionCache__c</field>
-        <value xsi:type="xsd:string">UserInfoCache</value>
+        <value xsi:type="xsd:string">local.UserInfoCache</value>
     </values>
     <values>
         <field>UserInfoSessionCache__c</field>
-        <value xsi:type="xsd:string">UserInfoCache</value>
+        <value xsi:type="xsd:string">local.UserInfoCache</value>
     </values>
     <values>
         <field>WithSecurityEnforced__c</field>
