@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>WithSchemaDescriber__c</fullName>
+    <defaultValue>true</defaultValue>
+    <description>Enforce field and object level data protection with Schema Describer</description>
+    <externalId>false</externalId>
+    <fieldManageability>SubscriberControlled</fieldManageability>
+    <inlineHelpText>Enforce field and object level data protection with Schema Describer</inlineHelpText>
+    <label>With Schema Describer</label>
+    <type>Checkbox</type>
+</CustomField>

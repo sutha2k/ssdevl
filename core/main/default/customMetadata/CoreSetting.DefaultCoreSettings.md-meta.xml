@@ -39,7 +39,15 @@
         <value xsi:type="xsd:string">local.UserInfoCache</value>
     </values>
     <values>
+        <field>WithSchemaDescriber__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
         <field>WithSecurityEnforced__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>WithStripInaccessible__c</field>
         <value xsi:type="xsd:boolean">true</value>
     </values>
 </CustomMetadata>

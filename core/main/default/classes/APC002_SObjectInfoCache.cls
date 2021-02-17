@@ -1,13 +1,38 @@
 /**
  * @author Sutharsan Pushparajah
  * @date 19/08/2019 - SSDL V1.0
+ * @date 17/02/2021 - Fix cache issues when no sessionId like in Anonymous execution
  * @description APC002_SObjectInfoCache - Cache Builder to retrieve user information and describe schema for an SObject
  */
 public inherited sharing class APC002_SObjectInfoCache implements Cache.CacheBuilder{
     
     /* Used to separate userId and sObjectName on a compound string */
     private static final String SEPARATOR = '-';
-    
+    /* SObject schema describer */
+    private static Schema.DescribeSObjectResult describeResult;
+
+    /**
+     * @author Sutharsan Pushparajah
+     * @date 17/02/2021
+     * @description Load user Info from cache and add SObject schema description
+     * @param userIdsObjectName compound id for cache using userId and SObjectName separated by '-'
+     * @return WRP001_UserInfo represents information on user and all SObject accessed during a session
+     */
+    public static WRP001_UserInfo getUserInfo(String userIdsObjectName) {
+        List<String> params = decomposeCacheId(userIdsObjectName);
+        String userId = params.get(0);
+        String sObjectName = params.get(1);
+        WRP001_UserInfo userInfo = APC001_UserInfoCache.getFromCache(userId);
+
+        if (describeResult == null){
+            APC002_SObjectInfoCache.describeResult = userInfo.schemaMap.get(sObjectName).getDescribe();
+        }
+
+        userInfo.describeSObjectResult.put(sObjectName, APC002_SObjectInfoCache.describeResult);
+        
+        return userInfo;
+    }
+
     /**
      * @author Sutharsan Pushparajah
      * @date 19/08/2019
@@ -16,13 +41,7 @@ public inherited sharing class APC002_SObjectInfoCache implements Cache.CacheBui
      * @return WRP001_UserInfo represents information on user and all SObject accessed during a session
      */
     public Object doLoad(String userIdsObjectName) {
-        List<String> params = decomposeCacheId(userIdsObjectName);
-        String userId = params.get(0);
-        String sObjectName = params.get(1);
-        WRP001_UserInfo userInfo = APC001_UserInfoCache.getFromCache(userId);
-        userInfo.describeSObjectResult.put(sObjectName, userInfo.schemaMap.get(sObjectName).getDescribe());
-        
-        return userInfo;
+        return getUserInfo(userIdsObjectName);
     }
     
     /**
@@ -57,6 +76,11 @@ public inherited sharing class APC002_SObjectInfoCache implements Cache.CacheBui
      * @return WRP001_UserInfo represents the user Info in cache for this userId and SObject
      */
     public static WRP001_UserInfo getFromCache(String userId, String sObjectName){
+
+        if (String.isEmpty(UserInfo.getSessionId())){
+            return getUserInfo(buildCacheId(userId, sObjectName));
+        }
+
         return (WRP001_UserInfo) Cache.Session.get(APC002_SObjectInfoCache.class, APC000_CoreSetting.coreSetting.SobjectInfoSessionCache__c+'.'+buildCacheId(userId,sObjectName));
     }
 }
