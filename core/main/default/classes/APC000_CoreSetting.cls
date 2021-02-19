@@ -17,12 +17,13 @@ public inherited sharing class APC000_CoreSetting{
                                                             CoreTriggerManagerClass__c, IsActive__c, IsDefault__c, 
                                                             LoggingEnabled__c, OrgId__c, RecursionLevel__c,
                                                             SobjectInfoSessionCache__c, UserInfoSessionCache__c,
-                                                            WithSecurityEnforced__c, WithStripInaccessible__c, WithSchemaDescriber__c
+                                                            WithSecurityEnforced__c, WithStripInaccessible__c, WithSchemaDescriber__c,
+                                                            BypassSchemaDescriberPermission__c, BypassStripinaccessiblePermission__c, BypassWithSecurityPermission__c
                                                             from CoreSetting__mdt 
                                                             where IsActive__c = true WITH SECURiTY_ENFORCED];
 
             SObjectAccessDecision decision = Security.stripInaccessible(AccessType.READABLE, coreSettingList);
-            coreSettingList = ( List<CoreSetting__mdt>) decision.getRecords();
+            coreSettingList = (List<CoreSetting__mdt>) decision.getRecords();
 
             for (CoreSetting__mdt cs : coreSettingList){
                 if (cs.IsActive__c){

@@ -2,6 +2,7 @@
  * @author Sutharsan Pushparajah
  * @date 23/11/2016 - First version
  * @date 26/08/2019 - SSDL V1.0
+ * @date 18/02/2021 - Adding new data protection features
  * @description APU002_Context - Utility to set/unset context variables
  */
 public inherited sharing class APU002_Context{
@@ -16,6 +17,12 @@ public inherited sharing class APU002_Context{
     
     /* Boolean to bypass all triggers. */
     public static Boolean contextualBypassAllTriggers = false;
+    /* Boolean to bypass schema describer data protection */
+    public static Boolean contextualBypassSchemaDescriber = false;
+    /* Boolean to bypass with security enforced data protection */
+    public static Boolean contextualBypassWithSecurityEnforced = false;
+    /* Boolean to bypass stripInaccessible data protection */
+    public static Boolean contextualBypassStripInaccessible = false;
     /* Number of contextual programmatic recursion alowed */
     public static Integer contextualRecursionLevel = null;
     /* Is the transaction initiated by trigger. */
@@ -199,5 +206,38 @@ public inherited sharing class APU002_Context{
      */
     public static Boolean isTriggerStillRunning(){
         return !runningTriggers.isEmpty();
+    }
+
+    /**
+     * @author Sutharsan Pushparajah
+     * @date 18/02/2021
+     * @description check if schema describer data access protection is enabled
+     * @return Boolean true to apply schema describer data acess protection 
+     */
+    public static Boolean isWithSchemaDescriber(){
+        return (APC000_CoreSetting.coreSetting.WithSchemaDescriber__c &&
+            !FeatureManagement.checkPermission(APC000_CoreSetting.coreSetting.BypassSchemaDescriberPermission__c) && !contextualBypassSchemaDescriber);
+    }
+
+    /**
+     * @author Sutharsan Pushparajah
+     * @date 18/02/2021
+     * @description check if with security enforced data access protection is enabled
+     * @return Boolean true to apply with security enforced data acess protection 
+     */
+    public static Boolean isWithSecurityEnforced(){
+        return (APC000_CoreSetting.coreSetting.WithSecurityEnforced__c &&
+            !FeatureManagement.checkPermission(APC000_CoreSetting.coreSetting.BypassWithSecurityPermission__c) && !contextualBypassWithSecurityEnforced);
+    }
+
+    /**
+     * @author Sutharsan Pushparajah
+     * @date 18/02/2021
+     * @description check if stripInaccessible data access protection is enabled
+     * @return Boolean true to apply stripInaccessible data acess protection 
+     */
+    public static Boolean isWithStripInaccessible(){
+        return (APC000_CoreSetting.coreSetting.WithStripInaccessible__c &&
+            !FeatureManagement.checkPermission(APC000_CoreSetting.coreSetting.BypassStripinaccessiblePermission__c) && !contextualBypassStripInaccessible);
     }
 }

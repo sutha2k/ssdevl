@@ -4,7 +4,7 @@
     <defaultValue>true</defaultValue>
     <description>Enforce field and object level data protection</description>
     <externalId>false</externalId>
-    <fieldManageability>SubscriberControlled</fieldManageability>
+    <fieldManageability>DeveloperControlled</fieldManageability>
     <inlineHelpText>Enforce field and object level data protection</inlineHelpText>
     <label>With StripInaccessible</label>
     <type>Checkbox</type>

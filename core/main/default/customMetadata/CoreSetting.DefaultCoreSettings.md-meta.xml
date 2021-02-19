@@ -7,6 +7,18 @@
         <value xsi:type="xsd:string">BP_ALL_TRIGGERS</value>
     </values>
     <values>
+        <field>BypassSchemaDescriberPermission__c</field>
+        <value xsi:type="xsd:string">BP_SCHEMA_DESCRIBER</value>
+    </values>
+    <values>
+        <field>BypassStripinaccessiblePermission__c</field>
+        <value xsi:type="xsd:string">BP_STRIPINACCESSIBLE</value>
+    </values>
+    <values>
+        <field>BypassWithSecurityPermission__c</field>
+        <value xsi:type="xsd:string">BP_SECURITY_ENFORCED</value>
+    </values>
+    <values>
         <field>CoreTriggerManagerClass__c</field>
         <value xsi:type="xsd:string">APT001_TriggerEventManager</value>
     </values>

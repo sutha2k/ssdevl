@@ -217,20 +217,44 @@ private class DM000_SObject_TEST{
         SampleForTest__c sample01 = new SampleForTest__c(ExternalId__c = 'DM000_TEST-01');
         SampleForTest__c sample02 = new SampleForTest__c(ExternalId__c = 'DM000_TEST-02');
         
-        List<SampleForTest__c> sampleList = new List<SampleForTest__c>{sample01, sample02};
-        
-        
+        List<SampleForTest__c> sampleList = new List<SampleForTest__c>();
+        List<WRP000_DMLResult.DmlResultMatcher> matcherList = new List<WRP000_DMLResult.DmlResultMatcher>();
+        List<SampleForTest__c> sampleList01 = new List<SampleForTest__c>{sample01};
+        List<SampleForTest__c> sampleList02 = new List<SampleForTest__c>{sample02};
+
         //USE CASE 01 - Insert SObject
         saveResults = datamanager.insertList(null, null);
         System.assertEquals(0, saveResults.size());
         
-        saveResults = datamanager.insertList(sampleList, true);
-        System.assertEquals(2, saveResults.size());
-        List<WRP000_DMLResult.DmlResultMatcher> matcherList = datamanager.buildDmlResultsMatcher(sampleList, saveResults, null, null);
-        System.assertNotEquals(null, matcherList);
-        System.assertEquals(2, matcherList.size());
-        System.assertEquals(sample01.Id, matcherList.get(0).theObject.Id);
-        System.assertEquals(sample02.Id, matcherList.get(1).theObject.Id);
+        APU002_Context.contextualBypassStripInaccessible = true;
+        saveResults = datamanager.insertList(sampleList01, true);
+        APU002_Context.contextualBypassStripInaccessible = false;
+
+        List<Database.SaveResult> saveResults02 = datamanager.insertList(sampleList02, true);
+
+        System.assertEquals(1, saveResults.size());
+        System.assertEquals(1, saveResults02.size());
+        List<WRP000_DMLResult.DmlResultMatcher> matcherList01 = datamanager.buildDmlResultsMatcher(sampleList01, saveResults, null, null);
+        List<WRP000_DMLResult.DmlResultMatcher> matcherList02 = datamanager.buildDmlResultsMatcher(sampleList02, saveResults02, null, null);
+        System.assertNotEquals(null, matcherList01);
+        System.assertNotEquals(null, matcherList02);
+        System.assertEquals(1, matcherList01.size());
+        System.assertEquals(1, matcherList02.size());
+
+        //The initial references must not be updated after the insert when using StripInaccessible, but should if not
+        System.assertNotEquals(null, sample01.Id);
+        System.assertEquals(null, sample02.Id);
+
+        //Getting new references
+        sample01 = (SampleForTest__c) matcherList01.get(0).theObject;
+        sample02 = (SampleForTest__c) matcherList02.get(0).theObject;
+        System.assertEquals(sample01.Id, matcherList01.get(0).theObject.Id);
+        System.assertEquals(sample02.Id, matcherList02.get(0).theObject.Id);
+
+        sampleList.addAll(sampleList01);
+        sampleList.addAll(sampleList02);
+        matcherList.addAll(matcherList01);
+        matcherList.addAll(matcherList02);
         
         //USE CASE 02 - Update SObject
         saveResults = datamanager.updateList(null, true);

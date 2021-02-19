@@ -11,6 +11,12 @@
       "logFile": "${command:AskForLogFileName}",
       "stopOnEntry": true,
       "trace": true
+    },
+    {
+      "name": "Launch Apex Debugger",
+      "type": "apex",
+      "request": "launch",
+      "sfdxProject": "${workspaceRoot}"
     }
   ]
 }

@@ -2,6 +2,7 @@
  * @author Sutharsan Pushparajah
  * @date 23/11/2016 - First version
  * @date 16/07/2019 - SSDL V1.0
+ * @date 18/02/2021 - Adding new data access protection features
  * @description Datas Manager 000 - Every DM must extends this class to inherit standard behaviour
  */
 public inherited sharing abstract class DM000_SObject {
@@ -334,15 +335,40 @@ public inherited sharing abstract class DM000_SObject {
      * @return N/A
      */
     private void executeQuery(WRP002_QueryBuilder queryBuilder, String soqlQuery){
-        if (describeResult.isAccessible() && describeResult.isQueryAble()){
+
+        if (!APU002_Context.isWithSchemaDescriber() || (describeResult.isAccessible() && describeResult.isQueryAble())){
             APU000_Logger.log(LoggingLevel.DEBUG, entityClassName, 'query', String.format('SOQL={0}',new List<Object>{soqlQuery}));
         
             if (!queryBuilder.isAggregateResults){
-                queryBuilder.results = Database.query(String.escapeSingleQuotes(soqlQuery));
+                queryBuilder.results = evaluateStripInaccessible(Database.query(String.escapeSingleQuotes(soqlQuery)), AccessType.READABLE);
             } else {
+                //StripInaccessible doesn't support aggregated result  
                 queryBuilder.aggregateResults = Database.query(String.escapeSingleQuotes(soqlQuery));
             }
         }
+    }
+
+    /**
+     * @author Sutharsan Pushparajah
+     * @date 19/02/2021
+     * @description Evaluate StripInaccessible data protection
+     * @param sObjectList represents the list of SObject to evaluate
+     * @param accessType This parameter determines the type of field-level access check to be performed
+     * @return represents the list of SObject processed
+     */
+    private List<SObject> evaluateStripInaccessible(List<SObject> sObjectList, System.AccessType accessType){
+
+        List<SObject> tempList = new List<SObject>(sObjectList);
+
+        if (APU002_Context.isWithStripInaccessible()){
+            SObjectAccessDecision decision = Security.stripInaccessible(accessType, sObjectList);
+            tempList = decision.getRecords();
+        }
+
+        sObjectList.clear();
+        sObjectList.addAll(tempList);
+
+        return sObjectList;
     }
 
     /**
@@ -407,11 +433,11 @@ public inherited sharing abstract class DM000_SObject {
      * @return List<Database.SaveResult> results of the insert DML operation
      */
     public virtual List<Database.SaveResult> insertList(List<SObject> sObjectList, Boolean allOrNone){
-        if (sObjectList == null ||  sObjectList.isEmpty() || !describeResult.isAccessible() || !describeResult.isCreateable()){
+        if (sObjectList == null ||  sObjectList.isEmpty() || (APU002_Context.isWithSchemaDescriber() && (!describeResult.isAccessible() || !describeResult.isCreateable()))){
             return new List<Database.SaveResult>();
         }
-        
-        return Database.insert(sObjectList, allOrNone);
+
+        return Database.insert(evaluateStripInaccessible(sObjectList, AccessType.CREATABLE), allOrNone);
     }
      
     /**
@@ -423,14 +449,14 @@ public inherited sharing abstract class DM000_SObject {
      * @return List<Database.UpsertResult> results of the upsert DML operation
      */
     public virtual List<Database.UpsertResult> upsertList(List<SObject> sObjectList, Schema.SObjectField externalIdField){
-        if (sObjectList == null ||  sObjectList.isEmpty() || !describeResult.isAccessible() || !describeResult.isCreateable() || !describeResult.isUpdateable()){
+        if (sObjectList == null ||  sObjectList.isEmpty() || (APU002_Context.isWithSchemaDescriber() && (!describeResult.isAccessible() || !describeResult.isCreateable() || !describeResult.isUpdateable()))){
             return new List<Database.UpsertResult>();
         }
         
         List<SObject> upsertList = (List<SObject>)Type.ForName('List<'+sObjectName+'>').newInstance();
         upsertList.addAll(sObjectList);
-        
-        return Database.upsert(upsertList, externalIdField);
+
+        return Database.upsert(evaluateStripInaccessible(sObjectList, AccessType.UPSERTABLE), externalIdField);
     }
      
     /**
@@ -442,11 +468,11 @@ public inherited sharing abstract class DM000_SObject {
      * @return List<Database.SaveResult> results of the update DML operation
      */
     public virtual List<Database.SaveResult> updateList(List<SObject> sObjectList, Boolean allOrNone){
-        if (sObjectList == null ||  sObjectList.isEmpty() || !describeResult.isAccessible() || !describeResult.isUpdateable()){
+        if (sObjectList == null ||  sObjectList.isEmpty() || (APU002_Context.isWithSchemaDescriber() && (!describeResult.isAccessible() || !describeResult.isUpdateable()))){
             return new List<Database.SaveResult>();
         }
          
-        return Database.update(sObjectList, allOrNone);
+        return Database.update(evaluateStripInaccessible(sObjectList, AccessType.UPDATABLE), allOrNone);
     }
      
     /**
@@ -458,10 +484,11 @@ public inherited sharing abstract class DM000_SObject {
      * @return List<Database.DeleteResult> results of the delete DML operation
      */
     public virtual List<Database.DeleteResult> deleteList(List<SObject> sObjectList, Boolean allOrNone){
-        if (sObjectList == null ||  sObjectList.isEmpty() || !describeResult.isAccessible() || !describeResult.isDeletable()){
+        if (sObjectList == null ||  sObjectList.isEmpty() || (APU002_Context.isWithSchemaDescriber() && (!describeResult.isAccessible() || !describeResult.isDeletable()))){
             return new List<Database.DeleteResult>();
         }
         
+        //No StripInaccessible support needed
         return Database.delete(sObjectList, allOrNone);
     }
      

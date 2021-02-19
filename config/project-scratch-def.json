@@ -1,7 +1,7 @@
 {
-  "orgName": "Demo company",
+  "orgName": "SSDEVL",
   "edition": "Developer",
-  "features": [],
+  "features": ["DebugApex"],
   "settings": {
     "lightningExperienceSettings": {
       "enableS1DesktopEnabled": true
