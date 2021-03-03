@@ -9,5 +9,8 @@
         }
     ],
     "sfdcLoginUrl": "https://login.salesforce.com",
-    "sourceApiVersion": "49.0"
+    "sourceApiVersion": "49.0",
+    "packageAliases": {
+        "ssdevl": "0Ho09000000PAx8CAG"
+    }
 }

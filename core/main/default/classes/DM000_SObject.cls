@@ -315,7 +315,7 @@ public inherited sharing abstract class DM000_SObject {
      * @return String SOQL query with security and final statements
      */
     private String extraQueryFilters(WRP002_QueryBuilder queryBuilder, String soqlQuery){
-        if (APC000_CoreSetting.coreSetting.WithSecurityEnforced__c){
+        if (APU002_Context.isWithSecurityEnforced()){
             soqlQuery += ' '+WITH_SECURITY_ENFORCED;
         }
         
