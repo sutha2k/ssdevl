@@ -7,7 +7,16 @@
         <locationY>278</locationY>
         <actionName>RestUtil</actionName>
         <actionType>apex</actionType>
+        <connector>
+            <targetReference>resultsScreen</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <outputParameters>
+            <assignToReference>results</assignToReference>
+            <name>output</name>
+        </outputParameters>
     </actionCalls>
+    <apiVersion>51.0</apiVersion>
     <interviewLabel>Call Heroku {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Call Heroku</label>
     <processMetadataValues>
@@ -44,6 +53,22 @@
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
     </screens>
+    <screens>
+        <name>resultsScreen</name>
+        <label>resultsScreen</label>
+        <locationX>176</locationX>
+        <locationY>398</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>false</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>screenResult</name>
+            <fieldText>&lt;p&gt;{!results}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
     <start>
         <locationX>50</locationX>
         <locationY>0</locationY>
@@ -51,5 +76,12 @@
             <targetReference>CallHeroku</targetReference>
         </connector>
     </start>
-    <status>Active</status>
+    <status>Draft</status>
+    <variables>
+        <name>results</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
 </Flow>

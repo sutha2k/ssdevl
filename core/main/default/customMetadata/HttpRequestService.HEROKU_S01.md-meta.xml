@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-    <label>Heroku Callout</label>
+    <label>Heroku Service 01</label>
     <protected>false</protected>
     <values>
         <field>BypassPrimaryEndpointPermission__c</field>
@@ -8,15 +8,15 @@
     </values>
     <values>
         <field>CustomHeaders__c</field>
-        <value xsi:type="xsd:string">{&quot;bearer&quot;:&quot;{!$Credential.OAuthToken}&quot;, &quot;instanceurl&quot;:&quot;https://enterprise-site-7301-dev-ed.cs102.my.salesforce.com&quot;}</value>
+        <value xsi:type="xsd:string">{&quot;bearer&quot;:&quot;{!$Credential.OAuthToken}&quot;, &quot;instanceurl&quot;:&quot;https://speed-momentum-7293-dev-ed.cs100.my.salesforce.com&quot;}</value>
     </values>
     <values>
         <field>ForceSecondaryEndpoint__c</field>
-        <value xsi:type="xsd:boolean">false</value>
+        <value xsi:type="xsd:boolean">true</value>
     </values>
     <values>
         <field>PrimaryNamedEndpoint__c</field>
-        <value xsi:type="xsd:string">CALLOUT:HEROKU</value>
+        <value xsi:type="xsd:string">CALLOUT:MyHeroku</value>
     </values>
     <values>
         <field>Resource__c</field>
@@ -24,7 +24,7 @@
     </values>
     <values>
         <field>SecondaryNamedEndpoint__c</field>
-        <value xsi:nil="true"/>
+        <value xsi:type="xsd:string">CALLOUT:MySalesforce</value>
     </values>
     <values>
         <field>Timeout__c</field>

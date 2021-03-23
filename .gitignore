@@ -33,3 +33,9 @@ Thumbs.db
 ehthumbs.db
 [Dd]esktop.ini
 $RECYCLE.BIN/
+
+#Org dependent files
+**/authproviders/**
+**/connectedApps/**
+**/appMenus/**
+**/namedCredentials/**
