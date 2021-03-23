@@ -15,10 +15,12 @@ public inherited sharing class APC000_CoreSetting{
         if (describer.isAccessible() && describer.isQueryAble()){
             List<CoreSetting__mdt> coreSettingList = [select BypassAllTriggerPermission__c, CoreSetting__mdt.DeveloperName,
                                                             CoreTriggerManagerClass__c, IsActive__c, IsDefault__c, 
-                                                            LoggingEnabled__c, OrgId__c, RecursionLevel__c,
+                                                            OrgId__c, RecursionLevel__c,
                                                             SobjectInfoSessionCache__c, UserInfoSessionCache__c,
                                                             WithSecurityEnforced__c, WithStripInaccessible__c, WithSchemaDescriber__c,
-                                                            BypassSchemaDescriberPermission__c, BypassStripinaccessiblePermission__c, BypassWithSecurityPermission__c
+                                                            BypassSchemaDescriberPermission__c, BypassStripinaccessiblePermission__c, BypassWithSecurityPermission__c,
+                                                            LoggingEnabled__c, EnableLoggingPermission__c, LoggingEventEnabled__c, EnableLoggingEventPermission__c, 
+                                                            CalloutTrackingEnabled__c, EnableCalloutTrackingPermission__c
                                                             from CoreSetting__mdt 
                                                             where IsActive__c = true WITH SECURiTY_ENFORCED];
 
