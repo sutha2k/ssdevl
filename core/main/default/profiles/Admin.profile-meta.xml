@@ -151,7 +151,27 @@
     <custom>false</custom>
     <fieldPermissions>
         <editable>false</editable>
+        <field>CoreSetting__mdt.CalloutTrackingEnabled__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>CoreSetting__mdt.CoreTriggerManagerClass__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>CoreSetting__mdt.EnableCalloutTrackingPermission__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>CoreSetting__mdt.EnableLoggingEventPermission__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>CoreSetting__mdt.EnableLoggingPermission__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -167,6 +187,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>CoreSetting__mdt.LoggingEnabled__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>CoreSetting__mdt.LoggingEventEnabled__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -607,10 +632,6 @@
     <userPermissions>
         <enabled>true</enabled>
         <name>ManageEmailClientConfig</name>
-    </userPermissions>
-    <userPermissions>
-        <enabled>true</enabled>
-        <name>ManageEntitlements</name>
     </userPermissions>
     <userPermissions>
         <enabled>true</enabled>

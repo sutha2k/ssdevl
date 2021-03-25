@@ -24,7 +24,7 @@
     </values>
     <values>
         <field>SecondaryNamedEndpoint__c</field>
-        <value xsi:type="xsd:string">CALLOUT:MySalesforce</value>
+        <value xsi:type="xsd:string">CALLOUT:MySalesforce/services/apexrest</value>
     </values>
     <values>
         <field>Timeout__c</field>

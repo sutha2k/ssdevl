@@ -10,6 +10,8 @@ public inherited sharing class WRP003_HttpRequest {
     public String body;
     /* EndPoint URL of the service */
     public String endPoint;
+    /* Query Parameters */
+    public String queryParameters;
     /* Specifify GET, POST, PUT, PATCH */
     public String requestType;
     /* Timeout The value of request timeout in ms */
@@ -46,6 +48,11 @@ public inherited sharing class WRP003_HttpRequest {
                 endpoint = requestService.PrimaryNamedEndpoint__c;
             }
             endpoint += requestService.Resource__c;
+
+            if (String.isNotEmpty(queryParameters)){
+                endPoint += queryParameters;
+            }
+
             timeout = Integer.valueOf(requestService.Timeout__c);
             
             if (String.isNotEmpty(requestService.CustomHeaders__c)){

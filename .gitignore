@@ -39,3 +39,15 @@ $RECYCLE.BIN/
 **/connectedApps/**
 **/appMenus/**
 **/namedCredentials/**
+**/remoteSiteSettings/**
+**/settings/**
+
+#Not used by Framework
+**/applications/**
+**/contentassets/**
+**/flexipages/**
+**/profilePasswordPolicies/**
+**/profiles/**
+**/profilesessionSettings/**
+**/staticresources/**
+**/tabs/**

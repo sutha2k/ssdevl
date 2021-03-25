@@ -11,7 +11,20 @@ package.xml
 # LWC Jest
 **/__tests__/**
 
+#Org dependent files
 **/authproviders/**
 **/connectedApps/**
 **/appMenus/**
 **/namedCredentials/**
+**/remoteSiteSettings/**
+**/settings/**
+
+#Not used by Framework
+**/applications/**
+**/contentassets/**
+**/flexipages/**
+**/profilePasswordPolicies/**
+**/profiles/**
+**/profilesessionSettings/**
+**/staticresources/**
+**/tabs/**

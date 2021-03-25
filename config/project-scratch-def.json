@@ -2,7 +2,7 @@
   "orgName": "SSDEVL",
   "edition": "Developer",
   "features": ["DebugApex"],
-  "language": "FR",
+  "language": "EN",
   "settings": {
     "lightningExperienceSettings": {
       "enableS1DesktopEnabled": true
