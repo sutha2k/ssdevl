@@ -12,7 +12,7 @@ private class APT000_TriggerManager_TEST{
     * @description TriggerEventManager for test purpose
     */
     public inherited sharing class APT100_SObjectInstance_BeforeInsert extends APT001_TriggerEventManager{
-    } 
+    }
     
     /**
      * @author Sutharsan Pushparajah

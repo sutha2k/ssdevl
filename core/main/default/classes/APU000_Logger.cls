@@ -19,14 +19,14 @@ public inherited sharing class APU000_Logger{
         
         String results;
 
-        if (APC000_CoreSetting.coreSetting.LoggingEnabled__c || FeatureManagement.checkPermission(APC000_CoreSetting.coreSetting.EnableLoggingPermission__c)) {
+        if (APU002_Context.isLoggingEnabled()) {
             List<Object> parameters = new List<Object>{className, methodName, message};
             results = String.format('## >> [{0}][{1}][MESSAGE]: {2}', parameters);
         
             system.debug(logLevel, results);
         }
 
-        if (APC000_CoreSetting.coreSetting.LoggingEventEnabled__c || FeatureManagement.checkPermission(APC000_CoreSetting.coreSetting.EnableLoggingEventPermission__c)) {
+        if (APU002_Context.isLoggingEventEnabled()) {
             
         }
         

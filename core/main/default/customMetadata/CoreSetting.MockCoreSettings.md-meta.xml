@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Mock Core Settings</label>
+    <protected>true</protected>
+    <values>
+        <field>BypassAllTriggerPermission__c</field>
+        <value xsi:type="xsd:string">BP_ALL_TRIGGERS</value>
+    </values>
+    <values>
+        <field>BypassSchemaDescriberPermission__c</field>
+        <value xsi:type="xsd:string">BP_SCHEMA_DESCRIBER</value>
+    </values>
+    <values>
+        <field>BypassStripinaccessiblePermission__c</field>
+        <value xsi:type="xsd:string">BP_STRIPINACCESSIBLE</value>
+    </values>
+    <values>
+        <field>BypassWithSecurityPermission__c</field>
+        <value xsi:type="xsd:string">BP_SECURITY_ENFORCED</value>
+    </values>
+    <values>
+        <field>CalloutTrackingEnabled__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>CoreTriggerManagerClass__c</field>
+        <value xsi:type="xsd:string">APT001_TriggerEventManager</value>
+    </values>
+    <values>
+        <field>EnableCalloutTrackingPermission__c</field>
+        <value xsi:type="xsd:string">EN_CALLOUT_TRACKING</value>
+    </values>
+    <values>
+        <field>EnableLoggingEventPermission__c</field>
+        <value xsi:type="xsd:string">EN_LOGGING_EVENT</value>
+    </values>
+    <values>
+        <field>EnableLoggingPermission__c</field>
+        <value xsi:type="xsd:string">EN_LOGGING</value>
+    </values>
+    <values>
+        <field>IsActive__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>IsDefault__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+    <values>
+        <field>LoggingEnabled__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>LoggingEventEnabled__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>OrgId__c</field>
+        <value xsi:type="xsd:string">Test Context</value>
+    </values>
+    <values>
+        <field>RecursionLevel__c</field>
+        <value xsi:type="xsd:double">7.0</value>
+    </values>
+    <values>
+        <field>SobjectInfoSessionCache__c</field>
+        <value xsi:type="xsd:string">local.UserInfoCache</value>
+    </values>
+    <values>
+        <field>UserInfoSessionCache__c</field>
+        <value xsi:type="xsd:string">local.UserInfoCache</value>
+    </values>
+    <values>
+        <field>WithSchemaDescriber__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>WithSecurityEnforced__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>WithStripInaccessible__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+</CustomMetadata>

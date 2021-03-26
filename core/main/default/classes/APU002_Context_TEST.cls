@@ -92,4 +92,56 @@ private class APU002_Context_TEST{
         
         Test.stopTest();
     }
+
+    /**
+     * @author Sutharsan Pushparajah
+     * @date 26/03/2021
+     * @description Testing running triggers
+     */
+    @isTest
+    private static void testRunningTriggers(){
+        Test.startTest();
+
+        System.assertEquals(false, APU002_Context.isTriggerStillRunning());
+        APU002_Context.addRunningTrigger('test','test');
+        System.assertEquals(true, APU002_Context.isTriggerInitiated);
+        System.assertEquals(false, APU002_Context.stopRecursion('test','test'));
+        System.assertEquals(true, APU002_Context.isTriggerStillRunning());
+
+        for (Integer cpt=0;cpt<6;cpt++){
+            System.assertEquals(false, APU002_Context.stopRecursion('test','test'));
+            APU002_Context.addRunningTrigger('test','test');
+            System.assertEquals(true, APU002_Context.isTriggerStillRunning());
+        }
+        System.assertEquals(true, APU002_Context.stopRecursion('test','test'));
+
+        for (Integer cpt=0;cpt<7;cpt++){
+            System.assertEquals(true, APU002_Context.isTriggerStillRunning());
+            APU002_Context.removeRunningTrigger('test','test');
+            System.assertEquals(false, APU002_Context.stopRecursion('test','test'));
+        }
+
+        System.assertEquals(false, APU002_Context.isTriggerStillRunning());
+
+        Test.stopTest();
+    }
+
+    /**
+     * @author Sutharsan Pushparajah
+     * @date 26/03/2021
+     * @description Testing features permissions
+     */
+    @isTest
+    private static void testFeaturesPermissions(){
+        Test.startTest();
+
+        System.assertEquals(true, APU002_Context.isWithSchemaDescriber());
+        System.assertEquals(true, APU002_Context.isWithSecurityEnforced());
+        System.assertEquals(true, APU002_Context.isWithStripInaccessible());
+        System.assertEquals(true, APU002_Context.isLoggingEnabled());
+        System.assertEquals(true, APU002_Context.isLoggingEventEnabled());
+        System.assertEquals(true, APU002_Context.isCalloutTrackingEnabled());
+
+        Test.stopTest();
+    }
 }

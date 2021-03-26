@@ -3,7 +3,7 @@
  * @date 04/03/2021 - SSDL V1.2
  * @description DM003_HttpRequestService - extends HttpRequest to callout external service
  */
-public inherited sharing class DM003_HttpRequestService extends DM002_HttpRequest{
+public inherited sharing class DM003_HttpRequestService extends DM002_HttpRequest implements ITF004_HttpRequestManager{
 
     /**
      * @author Sutharsan Pushparajah
@@ -24,7 +24,10 @@ public inherited sharing class DM003_HttpRequestService extends DM002_HttpReques
      * @return void
      */
     public override virtual void parseHttpResponse(WRP003_HttpRequest httpRequestInfos){
-        System.debug('Response : '+httpRequestInfos.httpResponse.getBody());
+        //Implement behaviour depending on external systems
+        //for example checking status code or parsing the response to check inner status
+        //Each external Systems should have its own implemnentation on dedicated class
+        //Every services from one external system should use only one service class (ex: DM003 for Goofle and DM004 for SAP which always extend DM002)
     }
 
     /**

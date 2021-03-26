@@ -4,6 +4,8 @@
  * @description WRP003_HttpRequest - Wrapper to embed Http Request/Response values 
  */
 public inherited sharing class WRP003_HttpRequest {
+    /* Header used to identify the service used */
+    public static final String SERVICE_HEADER = 'SID-XXXX';
     /* Available REST operations */
     public enum HttpMethods {POST, PUT, PATCH, GET}
     /* Body of the request */
@@ -58,7 +60,11 @@ public inherited sharing class WRP003_HttpRequest {
             if (String.isNotEmpty(requestService.CustomHeaders__c)){
              	Map<String, String> customHeaders = (Map<String, String>) JSON.deserialize(requestService.CustomHeaders__c, Map<String, String>.class);
                 header.putAll(customHeaders);
-            } 
+            }
+            
+            if (Test.isRunningTest()){
+                header.put(SERVICE_HEADER, requestService.ServiceId__c);
+            }
             
         } else {
             if (String.isNotEmpty(certificate)) {

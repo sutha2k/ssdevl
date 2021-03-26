@@ -185,17 +185,20 @@ public inherited sharing class APU002_Context{
      * @param eventName name of the trigger event 
      * @return Boolean true to bypass, false to proceed 
      */
+    @testVisible
     private static Boolean stopRecursion(String triggerClassName, String eventName){
         
+        Boolean results = false;
+
         if (APC000_CoreSetting.coreSetting.RecursionLevel__c != null || contextualRecursionLevel != null){
             String triggerEventName = triggerClassName+SEPARATOR+eventName;
             Integer countRunning = runningTriggers.get(triggerEventName);
             Integer allowedRecursionLevel = (contextualRecursionLevel != null?contextualRecursionLevel:(Integer)APC000_CoreSetting.coreSetting.RecursionLevel__c);
             
-            return (countRunning != null && countRunning >= allowedRecursionLevel);            
+            results = (countRunning != null && countRunning >= allowedRecursionLevel);            
         }
         
-        return false;
+        return results;
     }
     
     /**
@@ -239,5 +242,35 @@ public inherited sharing class APU002_Context{
     public static Boolean isWithStripInaccessible(){
         return (APC000_CoreSetting.coreSetting.WithStripInaccessible__c &&
             !FeatureManagement.checkPermission(APC000_CoreSetting.coreSetting.BypassStripinaccessiblePermission__c) && !contextualBypassStripInaccessible);
+    }
+
+    /**
+     * @author Sutharsan Pushparajah
+     * @date 26/03/2021
+     * @description check if Logging is enabled
+     * @return Boolean true to enable logging 
+     */
+    public static Boolean isLoggingEnabled(){
+        return (APC000_CoreSetting.coreSetting.LoggingEnabled__c || FeatureManagement.checkPermission(APC000_CoreSetting.coreSetting.EnableLoggingPermission__c));
+    }
+
+    /**
+     * @author Sutharsan Pushparajah
+     * @date 26/03/2021
+     * @description check if LoggingEvent is enabled
+     * @return Boolean true to enable logging event 
+     */
+    public static Boolean isLoggingEventEnabled(){
+        return (APC000_CoreSetting.coreSetting.LoggingEventEnabled__c || FeatureManagement.checkPermission(APC000_CoreSetting.coreSetting.EnableLoggingEventPermission__c));
+    }
+
+    /**
+     * @author Sutharsan Pushparajah
+     * @date 26/03/2021
+     * @description check if callout tracking is enabled
+     * @return Boolean true to enable callout tracking 
+     */
+    public static Boolean isCalloutTrackingEnabled(){
+        return (APC000_CoreSetting.coreSetting.CalloutTrackingEnabled__c || FeatureManagement.checkPermission(APC000_CoreSetting.coreSetting.EnableCalloutTrackingPermission__c));
     }
 }
