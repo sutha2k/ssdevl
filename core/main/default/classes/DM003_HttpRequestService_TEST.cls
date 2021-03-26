@@ -1,10 +1,10 @@
 /**
  * @author Sutharsan Pushparajah
  * @date 26/03/2021 - SSDL V1.2
- * @description Test class for DM002_HttpRequest
+ * @description Test class for DM003_HttpRequestService
  */
 @isTest
-private class DM002_HttpRequest_TEST {
+public with sharing class DM003_HttpRequestService_TEST {
     
     /**
      * @author Sutharsan Pushparajah
