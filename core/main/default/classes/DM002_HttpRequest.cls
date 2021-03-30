@@ -27,13 +27,19 @@ public inherited sharing abstract class DM002_HttpRequest {
      * @return N/A
      */
     protected void executeHttpRequest(WRP003_HttpRequest httpRequestInfos){
-        
+        Datetime startTime;
+        Datetime endTime;
+        String message;
         try {
             httpRequestInfos.buildRequest(requestService);
+            startTime = System.now();
             httpRequestInfos.httpResponse = new Http().send(httpRequestInfos.httpRequest);
+            endTime = System.now();
         } catch (Exception exp){
             httpRequestInfos.theException = exp;
+            message = exp.getMessage();
         }  finally {
+            APU000_Logger.trackCallout(requestService, startTime, endTime, message, httpRequestInfos);
             parseHttpResponse(httpRequestInfos);
         }
     }

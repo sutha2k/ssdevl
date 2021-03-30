@@ -19,17 +19,66 @@ public inherited sharing class APU000_Logger{
         
         String results;
 
-        if (APU002_Context.isLoggingEnabled()) {
-            List<Object> parameters = new List<Object>{className, methodName, message};
-            results = String.format('## >> [{0}][{1}][MESSAGE]: {2}', parameters);
+        try{
+
+            if (APU002_Context.isLoggingEnabled()) {
+                List<Object> parameters = new List<Object>{className, methodName, message};
+                results = String.format('## >> [{0}][{1}][MESSAGE]: {2}', parameters);
+            
+                if (logLevel != null){
+                    system.debug(logLevel, results);
+                }               
+            }
+
+            if (APU002_Context.isLoggingEventEnabled()) {
+                
+                if (Test.isRunningTest() && APU002_Context.bypassEventPublishingInTestContext){
+                    return results;
+                }
+
+                LoggingMessage__e messageEvent = EM010_LoggingMessage.create(APU002_Context.TRANSACTION_GUID, className, methodName, 
+                logLevel.name(), System.now(), System.now(), message, UserInfo.getUserId(), UserInfo.getUsername());
+                Database.SaveResult sr = EventBus.publish(messageEvent);
+                results += ' [EVENT PUBLISHED='+sr.isSuccess()+']'; 
+            }
+        } catch(Exception exp){
+            //PREVENT ANY ERROR TO BLOCK THE TRANSACTION
+            system.debug(LoggingLevel.ERROR, 'PUBLISHING LoggingMessage__e FAILED: '+exp.getMessage());
+            results += ' [EVENT PUBLISHED=false]';
+        }
+        return results;
+    }
+
+    /** 
+     * @author Sutharsan Pushparajah
+     * @date 29/03/2021
+     * @description Track Callout information by publishing an event on CalloutTracker__e
+     * @param requestService Instance of the service used to callout
+     * @param startTime Identify the start time of the callout
+     * @param endTime Identify the end time of the callout
+     * @param message The callout message
+     * @param wrpRequest extra information on the request
+     * @return Boolean publishing has been done or not
+     */
+    public static Boolean trackCallout(HttpRequestService__mdt requestService, Datetime startTime, Datetime endTime, String message, WRP003_HttpRequest wrpRequest){
+        Boolean results = false;
         
-            system.debug(logLevel, results);
+        if (APU002_Context.isCalloutTrackingEnabled()){
+        
+            if (Test.isRunningTest() && APU002_Context.bypassEventPublishingInTestContext){
+                return results;
+            }
+
+            try{
+                CalloutTracker__e calloutTrackerEvent = EM011_CalloutTracker.create(APU002_Context.TRANSACTION_GUID, requestService.ServiceId__c, requestService.Resource__c, startTime, endTime, message, UserInfo.getUserId(), UserInfo.getUsername(), wrpRequest);
+                Database.SaveResult sr = EventBus.publish(calloutTrackerEvent);
+                results = sr.isSuccess();
+            } catch(Exception exp){
+                //PREVENT ANY ERROR TO BLOCK THE TRANSACTION
+                system.debug(LoggingLevel.ERROR, 'PUBLISHING CalloutTracker__e FAILED: ' +exp.getMessage());
+            }
         }
 
-        if (APU002_Context.isLoggingEventEnabled()) {
-            
-        }
-        
         return results;
     }
 }

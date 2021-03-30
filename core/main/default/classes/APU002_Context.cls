@@ -29,6 +29,8 @@ public inherited sharing class APU002_Context{
     public static Boolean isTriggerInitiated = false;
     /* Is the transaction initiated by process. */
     public static Boolean isProcessInitiated = false;
+    /* Bypass Event Publishing in test Context whatever the setting */
+    public static Boolean bypassEventPublishingInTestContext = true;
     /* Contains Trigger Class Name or Trigger Event Name to bypass on the fly */
     private static Set<String> contextualBypassSpecificTriggers = new Set<String>();
     /* Count running triggers event instance */
