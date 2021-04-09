@@ -19,8 +19,24 @@
         <value xsi:type="xsd:string">BP_SECURITY_ENFORCED</value>
     </values>
     <values>
+        <field>CalloutTrackingEnabled__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+    <values>
         <field>CoreTriggerManagerClass__c</field>
         <value xsi:type="xsd:string">APT001_TriggerEventManager</value>
+    </values>
+    <values>
+        <field>EnableCalloutTrackingPermission__c</field>
+        <value xsi:type="xsd:string">EN_CALLOUT_TRACKING</value>
+    </values>
+    <values>
+        <field>EnableLoggingEventPermission__c</field>
+        <value xsi:type="xsd:string">EN_LOGGING_EVENT</value>
+    </values>
+    <values>
+        <field>EnableLoggingPermission__c</field>
+        <value xsi:type="xsd:string">EN_LOGGING</value>
     </values>
     <values>
         <field>IsActive__c</field>
@@ -33,6 +49,10 @@
     <values>
         <field>LoggingEnabled__c</field>
         <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>LoggingEventEnabled__c</field>
+        <value xsi:type="xsd:boolean">false</value>
     </values>
     <values>
         <field>OrgId__c</field>
