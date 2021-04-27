@@ -3,7 +3,7 @@
  * @date 04/03/2021 - SSDL V1.2
  * @description DM003_HttpRequestService - extends HttpRequest to callout external service
  */
-public inherited sharing class DM003_HttpRequestService extends DM002_HttpRequest implements ITF004_HttpRequestManager{
+public virtual inherited sharing class DM003_HttpRequestService extends DM002_HttpRequest implements ITF004_HttpRequestManager{
 
     /**
      * @author Sutharsan Pushparajah
