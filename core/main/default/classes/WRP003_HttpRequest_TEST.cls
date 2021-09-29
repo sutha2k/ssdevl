@@ -16,6 +16,7 @@ private class WRP003_HttpRequest_TEST {
 
         Test.startTest();
 
+        //Test case with basic information
         WRP003_HttpRequest wrpReq = new WRP003_HttpRequest();
         wrpReq.endPoint = 'https://mock';
         wrpReq.userName = 'testUser';
@@ -23,6 +24,7 @@ private class WRP003_HttpRequest_TEST {
         wrpReq.timeout = 120000;
         wrpReq.requestType = 'POST';
         wrpReq.body = 'testBody';
+        wrpReq.bodyParams.put('grant_type', 'client_credentials');
 
         wrpReq.buildRequest(null);
 
@@ -33,9 +35,28 @@ private class WRP003_HttpRequest_TEST {
         System.assertNotEquals(null, req);
         System.assertEquals(wrpReq.endPoint, req.getEndpoint());
         System.assertEquals(wrpReq.requestType, req.getMethod());
-        System.assertEquals(wrpReq.body, req.getBody());
+        System.assertEquals('grant_type=client_credentials&testBody', req.getBody());
         System.assertEquals(authorizationHeader, req.getHeader('Authorization'));
 
+        //Test case with advance parameters
+        DOM.Document doc = new DOM.Document();
+        doc.load('<xml></xml>');
+
+        //certificate can't be test with fake value
+        //wrpReq.certificate = 'fake';
+        wrpReq.accessToken = '1234';
+        wrpReq.bodyDocument = doc;
+        wrpReq.body = null;
+
+        wrpReq.buildRequest(null);
+        req = wrpReq.httpRequest;
+        authorizationHeader = 'Bearer 1234';
+
+        System.assertNotEquals(null, req);
+        System.assertEquals('<?xml version="1.0" encoding="UTF-8"?><xml />', req.getBodyDocument().toXmlString());
+        System.assertEquals(authorizationHeader, req.getHeader('Authorization'));
+
+        //test case with HttpRequestService
         HttpRequestService__mdt service = HttpRequestService__mdt.getInstance('TestingMockService');
         System.assertNotEquals(null, service);
         Map<String, String> customHeaders = (Map<String,String>) JSON.deserialize(service.CustomHeaders__c, Map<String,String>.class);

@@ -34,11 +34,11 @@ public inherited sharing abstract class DM002_HttpRequest {
             httpRequestInfos.buildRequest(requestService);
             startTime = System.now();
             httpRequestInfos.httpResponse = new Http().send(httpRequestInfos.httpRequest);
-            endTime = System.now();
         } catch (Exception exp){
             httpRequestInfos.theException = exp;
             message = exp.getMessage();
         }  finally {
+            endTime = System.now();
             APU000_Logger.trackCallout(requestService, startTime, endTime, message, httpRequestInfos);
             parseHttpResponse(httpRequestInfos);
         }

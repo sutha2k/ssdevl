@@ -24,14 +24,24 @@ public inherited sharing class WRP003_HttpRequest {
     public String password;
     /* The name of SSL certificate */
     public String certificate;
+    /* The acces token */
+    public String accessToken;
     /* Parameters to pass into the header (key/value) */
     public Map<String, String> header = new Map<String, String>();
+    /* Body parameters */
+    public Map<String, String> bodyParams = new Map<String,String>();
     /* HttpRequest */
     public System.HttpRequest httpRequest;
     /* HttpResponse */
     public System.HttpResponse httpResponse;
     /* Exception catching */
     public Exception theException;
+    /* SoapRequest */
+    public Object soapRequest;
+    /* SoapResponse */
+    public Map<String,Object> soapResponse;
+    /* bodydocument */
+    public DOM.Document bodyDocument;
 
     /**
      * @author Sutharsan Pushparajah
@@ -44,11 +54,12 @@ public inherited sharing class WRP003_HttpRequest {
         httpRequest = new HttpRequest();
 
         if (requestService != null){
+            endpoint = requestService.PrimaryNamedEndpoint__c;
+            
             if (requestService.ForceSecondaryEndpoint__c || FeatureManagement.checkPermission(requestService.BypassPrimaryEndpointPermission__c)){
                 endpoint = requestService.SecondaryNamedEndpoint__c;
-            } else {
-                endpoint = requestService.PrimaryNamedEndpoint__c;
             }
+                
             endpoint += requestService.Resource__c;
 
             if (String.isNotEmpty(queryParameters)){
@@ -66,16 +77,16 @@ public inherited sharing class WRP003_HttpRequest {
                 header.put(SERVICE_HEADER, requestService.ServiceId__c);
             }
             
-        } else {
-            if (String.isNotEmpty(certificate)) {
-                httpRequest.setClientCertificateName(certificate);
-            }
+        }
+        
+        if (String.isNotEmpty(certificate)) {
+            httpRequest.setClientCertificateName(certificate);
+        }
 
-            if (String.isNotEmpty(userName) && String.isNotEmpty(password)) {
-                Blob headerValue = Blob.valueOf(userName + ':' + password);
-                String authorizationHeader = 'Basic ' + EncodingUtil.base64Encode(headerValue);
-                httpRequest.setHeader('Authorization', authorizationHeader);
-            }
+        if (String.isNotEmpty(userName) && String.isNotEmpty(password)) {
+            Blob headerValue = Blob.valueOf(userName + ':' + password);
+            String authorizationHeader = 'Basic ' + EncodingUtil.base64Encode(headerValue);
+            httpRequest.setHeader('Authorization', authorizationHeader);
         }
 
         httpRequest.setEndPoint(endPoint);
@@ -88,8 +99,31 @@ public inherited sharing class WRP003_HttpRequest {
             }
         }
 
-        if (requestType != HttpMethods.GET.name() && String.isNotEmpty(body)) {
-            httpRequest.setBody(body);
+        if (String.isNotEmpty(accessToken)){
+            httpRequest.setHeader('Authorization', 'Bearer '+accessToken);
+        }
+
+        String bodyTemp = '';
+
+        if (bodyParams != null){
+            String result = '';
+            
+            for (String thisKey : bodyParams.keySet()) {
+                result += EncodingUtil.urlEncode(thisKey, 'UTF-8') + '=' + EncodingUtil.urlEncode(bodyParams.get(thisKey), 'UTF-8') + '&';
+            }
+            
+            if (!result.equals('')){
+                bodyTemp = result;
+            }
+        }
+        
+        if (requestType != HttpMethods.GET.name() && String.isNotEmpty(body)){
+            bodyTemp += body;
+            httpRequest.setBody(bodyTemp);
+        }
+
+        if (body == null && bodyDocument != null){
+            httpRequest.setBodyDocument(bodyDocument);
         }
     }
 }

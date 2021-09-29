@@ -66,6 +66,7 @@ private class APU000_Logger_TEST{
 
         Test.stopTest();
 
-        System.assertEquals(0, Limits.getDmlStatements());
+        //Flow is launched to replicate data
+        System.assertEquals(1, Limits.getDmlStatements());
     }
 }

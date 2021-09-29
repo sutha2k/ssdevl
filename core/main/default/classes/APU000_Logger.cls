@@ -70,9 +70,13 @@ public inherited sharing class APU000_Logger{
             }
 
             try{
+                wrpRequest.endPoint = EM012_NamedCredential.getTrueEndpoint(wrpRequest.endPoint);
                 CalloutTracker__e calloutTrackerEvent = EM011_CalloutTracker.create(APU002_Context.TRANSACTION_GUID, requestService.ServiceId__c, requestService.Resource__c, startTime, endTime, message, UserInfo.getUserId(), UserInfo.getUsername(), wrpRequest);
                 Database.SaveResult sr = EventBus.publish(calloutTrackerEvent);
                 results = sr.isSuccess();
+                if (!results){
+                    system.debug('PUBLISHING CalloutTracker__e FAILED: ' +sr.errors);
+                }
             } catch(Exception exp){
                 //PREVENT ANY ERROR TO BLOCK THE TRANSACTION
                 system.debug(LoggingLevel.ERROR, 'PUBLISHING CalloutTracker__e FAILED: ' +exp.getMessage());
