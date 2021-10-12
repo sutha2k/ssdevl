@@ -37,7 +37,6 @@ public inherited sharing abstract class DM004_SoapRequest {
         } catch (Exception exp){
             soapRequestInfos.httpRequestInfos.theException = exp;
             message = exp.getMessage();
-            System.debug('#### EXP +'+exp);
         }  finally {
             endTime = System.now();
             soapRequestInfos.httpRequestInfos.soapRequest = soapRequestInfos.request;

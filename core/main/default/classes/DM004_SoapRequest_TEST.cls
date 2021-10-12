@@ -45,6 +45,12 @@ private class DM004_SoapRequest_TEST {
         System.assertNotEquals(null, wrpReq.soapResponse);
         System.assertEquals('Mock Response', ((Map<String, MCK001_SoapRequestMock.SoapRequestResponse_element>)wrpReq.soapResponse).get('response_x').soapRequestResult);
 
+        
+        //HTTP METHOD  not provided
+        soapRequest.httpRequestInfos.requestType = null;
+        requestManager.sendRequest(soapRequest);
+        System.assertNotEquals(null, soapRequest.httpRequestInfos.theException);
+
         Test.stopTest();
     }
 }

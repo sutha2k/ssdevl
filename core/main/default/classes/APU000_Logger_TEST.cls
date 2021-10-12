@@ -64,9 +64,43 @@ private class APU000_Logger_TEST{
         System.assertEquals(true, results);
         APU002_Context.bypassEventPublishingInTestContext = true;
 
+        //NO DML is used
+        System.assertEquals(0, Limits.getDmlStatements());
+
         Test.stopTest();
 
         //Flow is launched to replicate data
         System.assertEquals(1, Limits.getDmlStatements());
+    }
+
+    /**
+     * @author Sutharsan Pushparajah
+     * @date 05/10/2021
+     * @description Testing callout tracking results for IP
+     */
+    @isTest
+    private static void testTrackCalloutIP(){
+        Test.startTest();
+
+        APU002_Context.bypassEventPublishingInTestContext = false;
+
+        Boolean result = APU000_Logger.trackCallout(null, null, null);
+        System.assertEquals(false, result);
+
+
+        Map<String, Object> input = new Map<String, Object>{APU000_Logger.SERVICE_NAME => 'TestingMockService', 
+                                                            APU000_Logger.METHOD => 'POST',
+                                                            APU000_Logger.MESSAGE => 'test',
+                                                            APU000_Logger.STATUS => 'OK',
+                                                            APU000_Logger.STATUS_CODE => 200,
+                                                            APU000_Logger.REQUEST => 'Request',
+                                                            APU000_Logger.RESPONSE => 'Response',
+                                                            APU000_Logger.QUERY_PARAMETERS => '?q=1'};
+        result = APU000_Logger.trackCallout(input, null, null);
+        System.assertEquals(true, result);
+
+        APU002_Context.bypassEventPublishingInTestContext = true;
+
+        Test.stopTest();
     }
 }

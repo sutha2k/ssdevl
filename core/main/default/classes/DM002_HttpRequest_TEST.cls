@@ -72,10 +72,17 @@ private class DM002_HttpRequest_TEST {
         System.assertEquals('KO', wrpReq.httpResponse.getStatus());
         System.assertEquals(400, wrpReq.httpResponse.getStatusCode());
 
-        //METHOD GET not provided
+        //METHOD GET not provided, POST by default
         wrpReq = new WRP003_HttpRequest();
         requestManager.sendRequest(wrpReq);
+        System.assertEquals('POST', wrpReq.requestType);
+
+        //HTTP METHOD  not provided
+        wrpReq = new WRP003_HttpRequest();
+        wrpReq.requestType = null;
+        requestManager.sendRequest(wrpReq);
         System.assertNotEquals(null, wrpReq.theException);
+ 
 
         Test.stopTest();
     }

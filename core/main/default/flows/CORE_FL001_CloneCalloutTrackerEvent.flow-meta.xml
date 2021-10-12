@@ -5,8 +5,8 @@
         <description>Clone CalloutTracker__e into CalloutTrackerExt__c</description>
         <name>CloneCalloutTrackerEvent</name>
         <label>Clone Callout Tracker Event</label>
-        <locationX>176</locationX>
-        <locationY>194</locationY>
+        <locationX>308</locationX>
+        <locationY>314</locationY>
         <assignmentItems>
             <assignToReference>CalloutTrackerExt.Endpoint__c</assignToReference>
             <operator>Assign</operator>
@@ -137,9 +137,31 @@
             <targetReference>Create_Callout_Tracker_Ext</targetReference>
         </connector>
     </assignments>
+    <decisions>
+        <name>isBypassable</name>
+        <label>isBypassable</label>
+        <locationX>176</locationX>
+        <locationY>194</locationY>
+        <defaultConnector>
+            <targetReference>CloneCalloutTrackerEvent</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>ProcessBypass</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Permission.BP_ALL_FLOW</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>Process Bypass</label>
+        </rules>
+    </decisions>
     <description>Clone CalloutTracker__e into CalloutTrackerExt__c</description>
-    <interviewLabel>FLOW001_CloneCalloutTrackerEvent {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>FLOW001_CloneCalloutTrackerEvent</label>
+    <interviewLabel>CORE_FL001_CloneCalloutTrackerEvent {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>CORE_FL001_CloneCalloutTrackerEvent</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -163,15 +185,15 @@
         <description>Create a clone record of CalloutTracker__e into CalloutTrackerExt__c</description>
         <name>Create_Callout_Tracker_Ext</name>
         <label>Create Callout Tracker Ext</label>
-        <locationX>176</locationX>
-        <locationY>314</locationY>
+        <locationX>308</locationX>
+        <locationY>434</locationY>
         <inputReference>CalloutTrackerExt</inputReference>
     </recordCreates>
     <start>
         <locationX>50</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>CloneCalloutTrackerEvent</targetReference>
+            <targetReference>isBypassable</targetReference>
         </connector>
         <object>CalloutTracker__e</object>
         <triggerType>PlatformEvent</triggerType>

@@ -85,6 +85,8 @@ public inherited sharing class EM011_CalloutTracker {
             if (temp.length() > maxLength){
                 temp = temp.substring(0, maxLength);
             }
+
+            temp = temp.replaceAll('\\$', '&#x24;');
         }
 
         return temp;

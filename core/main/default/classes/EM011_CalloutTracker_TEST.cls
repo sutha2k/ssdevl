@@ -104,6 +104,12 @@ private class EM011_CalloutTracker_TEST {
 
         System.assertEquals('0', returnedValue);
 
+        EM011_CalloutTracker.maxLength = 50;
+        value = '$Credentials.UserName';
+        returnedValue = EM011_CalloutTracker.truncate(value);
+
+        System.assertEquals('&#x24;Credentials.UserName', returnedValue);
+
         Test.stopTest();
     }
 }

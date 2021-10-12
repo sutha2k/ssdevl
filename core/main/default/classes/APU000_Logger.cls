@@ -5,6 +5,23 @@
  */
 public inherited sharing class APU000_Logger{
     
+    /* key to retrieve the unique name of the HttpRequestService__mdt */
+    public static final String SERVICE_NAME = 'serviceName';
+    /* key to retrieve any message or error to log */
+    public static final String MESSAGE = 'message';
+    /* key to retrieve the http method */
+    public static final String METHOD = 'method';
+    /* key to retrieve any parameters to append to url */
+    public static final String QUERY_PARAMETERS = 'queryParameters';
+    /* key to retrieve the http request status */
+    public static final String STATUS = 'status';
+    /* key to retrieve the http request status code */
+    public static final String STATUS_CODE = 'statusCode';
+    /* key to retrieve the full request */
+    public static final String REQUEST = 'request';
+    /* key to retrieve the full reponse */
+    public static final String RESPONSE = 'response';
+
     /** 
      * @author Sutharsan Pushparajah
      * @date 29/07/2019
@@ -74,6 +91,7 @@ public inherited sharing class APU000_Logger{
                 CalloutTracker__e calloutTrackerEvent = EM011_CalloutTracker.create(APU002_Context.TRANSACTION_GUID, requestService.ServiceId__c, requestService.Resource__c, startTime, endTime, message, UserInfo.getUserId(), UserInfo.getUsername(), wrpRequest);
                 Database.SaveResult sr = EventBus.publish(calloutTrackerEvent);
                 results = sr.isSuccess();
+
                 if (!results){
                     system.debug('PUBLISHING CalloutTracker__e FAILED: ' +sr.errors);
                 }
@@ -81,6 +99,56 @@ public inherited sharing class APU000_Logger{
                 //PREVENT ANY ERROR TO BLOCK THE TRANSACTION
                 system.debug(LoggingLevel.ERROR, 'PUBLISHING CalloutTracker__e FAILED: ' +exp.getMessage());
             }
+        }
+
+        return results;
+    }
+
+    /**
+     * @author Sutharsan Pushparajah
+     * @date 01/10/2021
+     * @param input Map of key/value for inputs
+     * @param output Map of key/value for outputs
+     * @param options Map of key/value for options
+     * @description invokeMethod trackCallout to publish callout event
+     * @return Boolean publishing has been done or not
+     */
+    public static Boolean trackCallout(Map<String,Object> input, Map<String,Object> output, Map<String,Object> options){
+        Boolean results = false;
+
+        try{
+            //Getting common static parameters
+            HttpRequestService__mdt requestService = HttpRequestService__mdt.getInstance((String) input.get(SERVICE_NAME));
+            Datetime startTime = Datetime.now();
+            Datetime endTime = Datetime.now();
+            String message = String.valueOf(input.get(MESSAGE));
+
+            //Setting Request paramters
+            WRP003_HttpRequest wrpRequest = new WRP003_HttpRequest();
+            wrpRequest.body = String.valueOf(input.get(REQUEST));
+            wrpRequest.requestType = String.valueOf(input.get(METHOD));
+            wrpRequest.buildRequest(requestService);
+            wrpRequest.queryParameters = String.valueOf(input.get(QUERY_PARAMETERS));
+
+            //Setting Response parameters
+            wrpRequest.httpResponse = new HttpResponse();
+
+            if (input.get(STATUS) != null){
+                wrpRequest.httpResponse.setStatus(String.valueOf(input.get(STATUS)));
+            }
+
+            if (input.get(STATUS_CODE) != null){
+                wrpRequest.httpResponse.setStatusCode(Integer.valueOf(input.get(STATUS_CODE)));
+            }
+
+            if (input.get(RESPONSE) != null){
+                wrpRequest.httpResponse.setBody(String.valueOf(input.get(RESPONSE)));
+            }
+
+            results = APU000_Logger.trackCallout(requestService, startTime, endTime, message, wrpRequest);
+
+        } catch (Exception exp){
+            system.debug(LoggingLevel.ERROR, 'PUBLISHING CalloutTracker__e FAILED: ' +exp.getMessage());
         }
 
         return results;

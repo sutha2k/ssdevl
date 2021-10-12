@@ -15,7 +15,7 @@ public inherited sharing class WRP003_HttpRequest {
     /* Query Parameters */
     public String queryParameters;
     /* Specifify GET, POST, PUT, PATCH */
-    public String requestType;
+    public String requestType = 'POST';
     /* Timeout The value of request timeout in ms */
     public Integer timeout;
     /* The username value for authentication */
