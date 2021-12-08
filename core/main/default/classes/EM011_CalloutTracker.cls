@@ -6,7 +6,7 @@
 public inherited sharing class EM011_CalloutTracker {
     
     /* Truncate field String if beyond */
-    public static Integer maxLength = 132000;
+    public static Integer maxLength = 131000;
 
     /**
      * @author Sutharsan Pushparajah
