@@ -86,7 +86,16 @@ public inherited sharing class APU000_Logger{
                 return results;
             }
 
+            Boolean oldContextualBypassSchemaDescriber = APU002_Context.contextualBypassSchemaDescriber;
+            Boolean oldContextualBypassStripInaccessible = APU002_Context.contextualBypassStripInaccessible;
+            Boolean oldContextualBypassWithSecurityEnforced = APU002_Context.contextualBypassWithSecurityEnforced;
+
             try{
+                //Entering SYSTEM MODE
+                APU002_Context.contextualBypassSchemaDescriber = true;
+                APU002_Context.contextualBypassStripInaccessible = true;
+                APU002_Context.contextualBypassWithSecurityEnforced = true;
+
                 wrpRequest.endPoint = EM012_NamedCredential.getTrueEndpoint(wrpRequest.endPoint);
                 CalloutTracker__e calloutTrackerEvent = EM011_CalloutTracker.create(APU002_Context.TRANSACTION_GUID, requestService.ServiceId__c, requestService.Resource__c, startTime, endTime, message, UserInfo.getUserId(), UserInfo.getUsername(), wrpRequest);
                 Database.SaveResult sr = EventBus.publish(calloutTrackerEvent);
@@ -98,6 +107,11 @@ public inherited sharing class APU000_Logger{
             } catch(Exception exp){
                 //PREVENT ANY ERROR TO BLOCK THE TRANSACTION
                 system.debug(LoggingLevel.ERROR, 'PUBLISHING CalloutTracker__e FAILED: ' +exp.getMessage());
+            } finally{
+                //Leaving SYSTEM MODE
+                APU002_Context.contextualBypassSchemaDescriber = oldContextualBypassSchemaDescriber;
+                APU002_Context.contextualBypassStripInaccessible = oldContextualBypassStripInaccessible;
+                APU002_Context.contextualBypassWithSecurityEnforced = oldContextualBypassWithSecurityEnforced;
             }
         }
 

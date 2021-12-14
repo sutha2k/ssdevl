@@ -15,9 +15,10 @@ public inherited sharing class APC000_CoreSetting{
     static {
         CoreSetting__mdt mockCoreSetting;
         String orgId = UserInfo.getOrganizationId();
-        Schema.DescribeSObjectResult describer = CoreSetting__mdt.SObjectType.getDescribe();
+        //REMOVING to handle community user who do not have permisisons 
+        //Schema.DescribeSObjectResult describer = CoreSetting__mdt.SObjectType.getDescribe();
 
-        if (describer.isAccessible() && describer.isQueryAble()){
+        /*if (describer.isAccessible() && describer.isQueryAble()){*/
             List<CoreSetting__mdt> coreSettingList = [select BypassAllTriggerPermission__c, DeveloperName,
                                                             CoreTriggerManagerClass__c, IsActive__c, IsDefault__c, 
                                                             OrgId__c, RecursionLevel__c,
@@ -27,10 +28,10 @@ public inherited sharing class APC000_CoreSetting{
                                                             LoggingEnabled__c, EnableLoggingPermission__c, LoggingEventEnabled__c, EnableLoggingEventPermission__c, 
                                                             CalloutTrackingEnabled__c, EnableCalloutTrackingPermission__c
                                                             from CoreSetting__mdt 
-                                                            where IsActive__c = true WITH SECURITY_ENFORCED];
+                                                            where IsActive__c = true /*WITH SECURITY_ENFORCED*/];
 
-            SObjectAccessDecision decision = Security.stripInaccessible(AccessType.READABLE, coreSettingList);
-            coreSettingList = (List<CoreSetting__mdt>) decision.getRecords();
+            /*SObjectAccessDecision decision = Security.stripInaccessible(AccessType.READABLE, coreSettingList);
+            coreSettingList = (List<CoreSetting__mdt>) decision.getRecords();*/
 
             for (CoreSetting__mdt cs : coreSettingList){
                 if (cs.DeveloperName == MOCK_CORE_SETTING){
@@ -52,6 +53,6 @@ public inherited sharing class APC000_CoreSetting{
             if (Test.isRunningTest()){
                 coreSetting = mockCoreSetting;
             }
-        }
+        /*}*/
     }
 }
