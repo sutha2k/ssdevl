@@ -21,7 +21,8 @@ public inherited sharing class APC001_UserInfoCache implements Cache.CacheBuilde
     public static WRP001_UserInfo getUserInfo(String userId) {
         
         if (user == null || globalDescribe == null){
-            APC001_UserInfoCache.user = (User)[SELECT Id, Name, IsActive, Username, ProfileId, UserRoleId FROM User WHERE id = :userid WITH SECURiTY_ENFORCED];
+            //REMOVING Security check to handle community user who do not have permisisons
+            APC001_UserInfoCache.user = (User)[SELECT Id, Name, IsActive, Username, ProfileId, UserRoleId FROM User WHERE id = :userid /*WITH SECURITY_ENFORCED*/];
             APC001_UserInfoCache.globalDescribe = Schema.getGlobalDescribe();
         }
         
