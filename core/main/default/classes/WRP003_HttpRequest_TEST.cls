@@ -47,6 +47,7 @@ private class WRP003_HttpRequest_TEST {
         wrpReq.accessToken = '1234';
         wrpReq.bodyDocument = doc;
         wrpReq.body = null;
+        wrpReq.bodyParams.clear();
 
         wrpReq.buildRequest(null);
         req = wrpReq.httpRequest;
