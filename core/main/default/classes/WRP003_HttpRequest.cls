@@ -112,14 +112,19 @@ public inherited sharing class WRP003_HttpRequest {
                 result += EncodingUtil.urlEncode(thisKey, 'UTF-8') + '=' + EncodingUtil.urlEncode(bodyParams.get(thisKey), 'UTF-8') + '&';
             }
             
-            if (!result.equals('')){
-                bodyTemp = result;
+            if (String.isNotEmpty(result)){
+                bodyTemp = result.removeEnd('&');
             }
         }
         
-        if (requestType != HttpMethods.GET.name() && String.isNotEmpty(body)){
-            bodyTemp += body;
-            httpRequest.setBody(bodyTemp);
+        if (requestType != HttpMethods.GET.name()){
+            if (String.isNotEmpty(body)){
+                bodyTemp += body;
+            }
+            
+            if (String.isNotEmpty(bodyTemp)){
+                httpRequest.setBody(bodyTemp);
+            }
         }
 
         if (body == null && bodyDocument != null){
