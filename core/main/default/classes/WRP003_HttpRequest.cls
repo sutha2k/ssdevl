@@ -119,7 +119,8 @@ public inherited sharing class WRP003_HttpRequest {
         
         if (requestType != HttpMethods.GET.name()){
             if (String.isNotEmpty(body)){
-                bodyTemp += body;
+                bodyTemp += '&' + body;
+                bodyTemp = bodyTemp.removeStart('&');
             }
             
             if (String.isNotEmpty(bodyTemp)){
@@ -127,7 +128,7 @@ public inherited sharing class WRP003_HttpRequest {
             }
         }
 
-        if (body == null && bodyDocument != null){
+        if (String.isEmpty(bodyTemp) && bodyDocument != null){
             httpRequest.setBodyDocument(bodyDocument);
         }
     }
