@@ -43,7 +43,7 @@ public inherited sharing class APU000_Logger{
                 results = String.format('## >> [{0}][{1}][MESSAGE]: {2}', parameters);
             
                 if (logLevel != null){
-                    system.debug(logLevel, results);
+                    System.debug(logLevel, results);
                 }               
             }
 
@@ -60,7 +60,7 @@ public inherited sharing class APU000_Logger{
             }
         } catch(Exception exp){
             //PREVENT ANY ERROR TO BLOCK THE TRANSACTION
-            system.debug(LoggingLevel.ERROR, 'PUBLISHING LoggingMessage__e FAILED: '+exp.getMessage());
+            System.debug(LoggingLevel.ERROR, 'PUBLISHING LoggingMessage__e FAILED: '+exp.getMessage());
             results += ' [EVENT PUBLISHED=false]';
         }
         return results;
@@ -96,17 +96,20 @@ public inherited sharing class APU000_Logger{
                 APU002_Context.contextualBypassStripInaccessible = true;
                 APU002_Context.contextualBypassWithSecurityEnforced = true;
 
-                wrpRequest.endPoint = EM012_NamedCredential.getTrueEndpoint(wrpRequest.endPoint);
-                CalloutTracker__e calloutTrackerEvent = EM011_CalloutTracker.create(APU002_Context.TRANSACTION_GUID, requestService.ServiceId__c, requestService.Resource__c, startTime, endTime, message, UserInfo.getUserId(), UserInfo.getUsername(), wrpRequest);
-                Database.SaveResult sr = EventBus.publish(calloutTrackerEvent);
-                results = sr.isSuccess();
+                if (requestService.TrackingEnabled__c){
 
-                if (!results){
-                    system.debug('PUBLISHING CalloutTracker__e FAILED: ' +sr.errors);
+                    wrpRequest.endPoint = EM012_NamedCredential.getTrueEndpoint(wrpRequest.endPoint);
+                    CalloutTracker__e calloutTrackerEvent = EM011_CalloutTracker.create(APU002_Context.TRANSACTION_GUID, requestService.ServiceId__c, requestService.Resource__c, startTime, endTime, message, UserInfo.getUserId(), UserInfo.getUsername(), wrpRequest);
+                    Database.SaveResult sr = EventBus.publish(calloutTrackerEvent);
+                    results = sr.isSuccess();
+
+                    if (!results){
+                        System.debug(LoggingLevel.Error, 'PUBLISHING CalloutTracker__e FAILED: ' +sr.errors);
+                    }
                 }
             } catch(Exception exp){
                 //PREVENT ANY ERROR TO BLOCK THE TRANSACTION
-                system.debug(LoggingLevel.ERROR, 'PUBLISHING CalloutTracker__e FAILED: ' +exp.getMessage());
+                System.debug(LoggingLevel.ERROR, 'PUBLISHING CalloutTracker__e FAILED: ' +exp.getMessage());
             } finally{
                 //Leaving SYSTEM MODE
                 APU002_Context.contextualBypassSchemaDescriber = oldContextualBypassSchemaDescriber;
@@ -162,7 +165,7 @@ public inherited sharing class APU000_Logger{
             results = APU000_Logger.trackCallout(requestService, startTime, endTime, message, wrpRequest);
 
         } catch (Exception exp){
-            system.debug(LoggingLevel.ERROR, 'PUBLISHING CalloutTracker__e FAILED: ' +exp.getMessage());
+            System.debug(LoggingLevel.ERROR, 'PUBLISHING CalloutTracker__e FAILED: ' +exp.getMessage());
         }
 
         return results;

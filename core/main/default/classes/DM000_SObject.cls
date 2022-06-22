@@ -399,6 +399,23 @@ public inherited sharing abstract class DM000_SObject {
          
         return queryBuilder;
     }
+
+    /**
+     * @author Sutharsan Pushparajah
+     * @date 19/04/2022
+     * @description execute a SOQL query
+     * @param afterSelect represents the fields to select
+     * @param afterWhere represents all where clauses
+     * @param finalStatements represents limit, order by ... clauses
+     * @param simpleFilters map containing binded variable name as key and value to filter for this binded variable
+     * @param listFilters map containing binded variable name as key and list of value to filter for this binded variable
+     * @return List<SObject> query results of SObject records
+     */
+    public virtual List<SObject> query(String afterSelect, String afterWhere, String finalStatements, Map<String, Object> simpleFilters, Map<String, List<Object>> listFilters){
+        WRP002_QueryBuilder queryBuilder = new WRP002_QueryBuilder(afterSelect, afterWhere, finalStatements, simpleFilters, listFilters);
+        queryBuilder = query(queryBuilder);
+        return queryBuilder.results;
+    }
      
     /**
      * @author Sutharsan Pushparajah

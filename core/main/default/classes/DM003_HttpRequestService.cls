@@ -38,7 +38,7 @@ public virtual inherited sharing class DM003_HttpRequestService extends DM002_Ht
      * @param httpRequestInfos wrapper containing request/response infos
      * @return void
      */
-    public void sendRequest(WRP003_HttpRequest httpRequestInfos){
+    public virtual void sendRequest(WRP003_HttpRequest httpRequestInfos){
         executeHttpRequest(httpRequestInfos);
     }
 }

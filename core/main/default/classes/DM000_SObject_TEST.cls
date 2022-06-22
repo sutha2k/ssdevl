@@ -294,6 +294,8 @@ private class DM000_SObject_TEST{
         System.assertEquals(sample02.Id, matcherList.get(1).theObject.Id);
         
         //USE CASE 04 - Query
+        
+        //NO fields to select
         hasErrors = false;
         String message;
         
@@ -320,7 +322,23 @@ private class DM000_SObject_TEST{
         
         System.assertEquals(true, hasErrors);
         System.assertEquals('Missing select args, actual=null', message);
+
+        //No fields to select with direct query
+        hasErrors = false;
+        message = null;
+        List<SObject> results;
+       
+        try{
+            results = datamanager.query(null, 'ExternalId__c = :extId', 'LIMIT 1', new Map<String, Object>{'extId' => 'DM000_TEST-01'}, null);
+        } catch(DM000_SObject.DataManagerException exp){
+            hasErrors = true;
+            message = exp.getMessage();
+        }
         
+        System.assertEquals(true, hasErrors);
+        System.assertEquals('Missing select args, actual=null', message);
+        
+        //Results with simple filter
         WRP002_QueryBuilder queryBuilder01 = new WRP002_QueryBuilder('Id, Name, ExternalId__c', 'ExternalId__c = :extId', 'LIMIT 1', new Map<String, Object>{'extId' => 'DM000_TEST-01'}, null);
         queryBuilder01 = datamanager.query(queryBuilder01);
         System.assertNotEquals(null, queryBuilder01.results);
@@ -328,7 +346,14 @@ private class DM000_SObject_TEST{
         System.assertEquals(1, queryBuilder01.results.size());
         List<SampleForTest__c> queryResults = queryBuilder01.results;
         System.assertEquals('DM000_TEST-01', queryResults.get(0).ExternalId__c);
+
+        //Results with simple filter and direct query
+        results = datamanager.query('Id, Name, ExternalId__c', 'ExternalId__c = :extId', 'LIMIT 1', new Map<String, Object>{'extId' => 'DM000_TEST-01'}, null);
+        System.assertNotEquals(null, results);
+        System.assertEquals(1, results.size());
+        System.assertEquals('DM000_TEST-01', ((SampleForTest__c) results.get(0)).ExternalId__c);
         
+        //Results with List filter
         WRP002_QueryBuilder queryBuilder02 = new WRP002_QueryBuilder('Id, Name, ExternalId__c', 'ExternalId__c in :extId', null, null, new Map<String, List<Object>>{'extId' => new List<String>{'DM000_TEST-01', 'DM000_TEST-02'}});
         queryBuilder02 = datamanager.query(queryBuilder02);
         System.assertNotEquals(null, queryBuilder02.results);
@@ -337,7 +362,15 @@ private class DM000_SObject_TEST{
         queryResults = queryBuilder02.results;
         System.assertEquals('DM000_TEST-01', queryResults.get(0).ExternalId__c);
         System.assertEquals('DM000_TEST-02', queryResults.get(1).ExternalId__c);
+
+        //Results with List filter and direct query
+        results = datamanager.query('Id, Name, ExternalId__c', 'ExternalId__c in :extId', null, null, new Map<String, List<Object>>{'extId' => new List<String>{'DM000_TEST-01', 'DM000_TEST-02'}});
+        System.assertNotEquals(null, results);
+        System.assertEquals(2, results.size());
+        System.assertEquals('DM000_TEST-01', ((SampleForTest__c) results.get(0)).ExternalId__c);
+        System.assertEquals('DM000_TEST-02', ((SampleForTest__c) results.get(1)).ExternalId__c);
         
+        //Results with aggregate query
         WRP002_QueryBuilder queryBuilder03 = new WRP002_QueryBuilder('count(Id) mycount', null, null);
         queryBuilder03.isAggregateResults = true;
         queryBuilder03 = datamanager.query(queryBuilder03);

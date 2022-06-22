@@ -3,7 +3,7 @@
  * @date 01/10/2021
  * @description PIC002_CalloutTracker - Call Callout logger from IP
  */
-global inherited sharing class PIC002_CalloutTracker implements vlocity_cmt.VlocityOpenInterface{
+global inherited sharing class PIC002_CalloutTracker /*implements vlocity_cmt.VlocityOpenInterface*/{//uncomment this if you have vlocity
     
     public static final String METHOD_NAME = 'trackCallout';
   

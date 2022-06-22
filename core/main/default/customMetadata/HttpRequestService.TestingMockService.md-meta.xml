@@ -11,6 +11,10 @@
         <value xsi:type="xsd:string">{&quot;testheader&quot;:&quot;testvalue&quot;}</value>
     </values>
     <values>
+        <field>Description__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
         <field>ForceSecondaryEndpoint__c</field>
         <value xsi:type="xsd:boolean">true</value>
     </values>
@@ -33,5 +37,9 @@
     <values>
         <field>Timeout__c</field>
         <value xsi:type="xsd:double">120000.0</value>
+    </values>
+    <values>
+        <field>TrackingEnabled__c</field>
+        <value xsi:type="xsd:boolean">true</value>
     </values>
 </CustomMetadata>

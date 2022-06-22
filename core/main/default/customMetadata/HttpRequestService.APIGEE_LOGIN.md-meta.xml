@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>APIGEE_LOGIN</label>
+    <protected>true</protected>
+    <values>
+        <field>BypassPrimaryEndpointPermission__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>CustomHeaders__c</field>
+        <value xsi:type="xsd:string">{&quot;Content-Type&quot;:&quot;application/x-www-form-urlencoded;charset=UTF-8&quot;,&quot;scope&quot;:&quot;apihour:read&quot;}</value>
+    </values>
+    <values>
+        <field>Description__c</field>
+        <value xsi:type="xsd:string">Ressource for calling the token endpoint of APIGEE</value>
+    </values>
+    <values>
+        <field>ForceSecondaryEndpoint__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+    <values>
+        <field>PrimaryNamedEndpoint__c</field>
+        <value xsi:type="xsd:string">CALLOUT:APIGEE</value>
+    </values>
+    <values>
+        <field>Resource__c</field>
+        <value xsi:type="xsd:string">/oauth2/v1/token</value>
+    </values>
+    <values>
+        <field>SecondaryNamedEndpoint__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>ServiceId__c</field>
+        <value xsi:type="xsd:string">SID-0001</value>
+    </values>
+    <values>
+        <field>Timeout__c</field>
+        <value xsi:type="xsd:double">120000.0</value>
+    </values>
+    <values>
+        <field>TrackingEnabled__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+</CustomMetadata>

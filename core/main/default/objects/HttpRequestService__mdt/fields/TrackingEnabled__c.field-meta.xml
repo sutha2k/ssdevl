@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>TrackingEnabled__c</fullName>
+    <defaultValue>true</defaultValue>
+    <description>When tracking is enabled globally, this option allow to enable/disable tracking locally</description>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <inlineHelpText>When tracking is enabled globally, this option allow to enable/disable tracking locally</inlineHelpText>
+    <label>Tracking Enabled?</label>
+    <type>Checkbox</type>
+</CustomField>

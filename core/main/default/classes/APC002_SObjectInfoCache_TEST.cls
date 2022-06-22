@@ -15,8 +15,9 @@ private class APC002_SObjectInfoCache_TEST{
     private static void testBuildCacheId(){
         Test.startTest();
         
-        String cacheId = APC002_SObjectInfoCache.buildCacheId('123456', 'SObjectName');
-        System.assertEquals('123456-SObjectName', cacheId);
+        String cacheId = APC002_SObjectInfoCache.buildCacheId('123456', 'Account');
+        String sObjectKeyPrefix = (Schema.describeSObjects(new List<String>{'Account'})).get(0).getKeyPrefix();
+        System.assertEquals(EncodingUtil.convertToHex(Blob.valueOf('123456-'+sObjectKeyPrefix)), cacheId);
         
         Test.stopTest();
     }
@@ -30,9 +31,11 @@ private class APC002_SObjectInfoCache_TEST{
     private static void testDecomposeCacheId(){
         Test.startTest();
         
-        List<String> cacheId = APC002_SObjectInfoCache.decomposeCacheId('123456-SObjectName');
+        String sObjectKeyPrefix = (Schema.describeSObjects(new List<String>{'Account'})).get(0).getKeyPrefix();
+
+        List<String> cacheId = APC002_SObjectInfoCache.decomposeCacheId(EncodingUtil.convertToHex(Blob.valueOf('123456-'+sObjectKeyPrefix)));
         System.assertEquals('123456', cacheId.get(0));
-        System.assertEquals('SObjectName', cacheId.get(1));
+        System.assertEquals(sObjectKeyPrefix, cacheId.get(1));
         
         Test.stopTest();
     }
@@ -59,7 +62,13 @@ private class APC002_SObjectInfoCache_TEST{
         
         Schema.DescribeSObjectResult result = describer.get(sObjectName);
         System.assertNotequals(null, result);
-        System.assertequals(sObjectName, result.getName());   
+        System.assertequals(sObjectName, result.getName());
+
+        //Testing access for 2nd Object
+        userInfo = APC002_SObjectInfoCache.getFromCache(userId, 'Account');
+        describer = userInfo.describeSObjectResult;
+        result = describer.get('Account');
+        System.assertequals('Account', result.getName());
         
         Test.stopTest();
     }

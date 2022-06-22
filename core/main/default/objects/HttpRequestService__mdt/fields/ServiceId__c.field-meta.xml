@@ -7,7 +7,7 @@
     <fieldManageability>DeveloperControlled</fieldManageability>
     <inlineHelpText>Technical Id used in test context</inlineHelpText>
     <label>Service Id</label>
-    <length>18</length>
+    <length>40</length>
     <required>true</required>
     <type>Text</type>
     <unique>true</unique>

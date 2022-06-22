@@ -15,20 +15,19 @@ public inherited sharing class APC002_SObjectInfoCache implements Cache.CacheBui
      * @author Sutharsan Pushparajah
      * @date 17/02/2021
      * @description Load user Info from cache and add SObject schema description
-     * @param userIdsObjectName compound id for cache using userId and SObjectName separated by '-'
+     * @param userIdsObjectKeyPrefix compound id for cache using userId and SObject Key Prefix separated by '-'
      * @return WRP001_UserInfo represents information on user and all SObject accessed during a session
      */
-    public static WRP001_UserInfo getUserInfo(String userIdsObjectName) {
-        List<String> params = decomposeCacheId(userIdsObjectName);
+    public static WRP001_UserInfo getUserInfo(String userIdsObjectKeyPrefix) {
+        List<String> params = decomposeCacheId(userIdsObjectKeyPrefix);
         String userId = params.get(0);
-        String sObjectName = params.get(1);
+        String sObjectKeyPrefix = params.get(1);
+        Id fakeId = sObjectKeyPrefix + '30000000014c';
+        Schema.DescribeSObjectResult dsr = fakeId.getSobjectType().getDescribe();
+        String sObjectName = dsr.getName();
+
         WRP001_UserInfo userInfo = APC001_UserInfoCache.getFromCache(userId);
-
-        if (describeResult == null){
-            APC002_SObjectInfoCache.describeResult = userInfo.schemaMap.get(sObjectName).getDescribe();
-        }
-
-        userInfo.describeSObjectResult.put(sObjectName, APC002_SObjectInfoCache.describeResult);
+        userInfo.describeSObjectResult.put(sObjectName, dsr);
         
         return userInfo;
     }
@@ -37,11 +36,11 @@ public inherited sharing class APC002_SObjectInfoCache implements Cache.CacheBui
      * @author Sutharsan Pushparajah
      * @date 19/08/2019
      * @description Load user Info from cache and add SObject schema description
-     * @param userIdsObjectName compound id for cache using userId and SObjectName separated by '-'
+     * @param userIdsObjectKeyPrefix compound id for cache using userId and SObject Key Prefix separated by '-'
      * @return WRP001_UserInfo represents information on user and all SObject accessed during a session
      */
-    public Object doLoad(String userIdsObjectName) {
-        return getUserInfo(userIdsObjectName);
+    public Object doLoad(String userIdsObjectKeyPrefix) {
+        return getUserInfo(userIdsObjectKeyPrefix);
     }
     
     /**
@@ -50,21 +49,22 @@ public inherited sharing class APC002_SObjectInfoCache implements Cache.CacheBui
      * @description Build a compound Id for cache based on userId and SObjectName separated by '-'
      * @param userId Id of the user
      * @param sObjectName API name of the SObject
-     * @return String represents a compound Id for cache based on userId and SObjectName separated by '-'
+     * @return String represents a compound Id for cache based on userId and SObject Key Prefix separated by '-' in HEX format
      */
     public static String buildCacheId(String userId, String sObjectName){
-        return String.format('{0}{1}{2}', new List<Object>{userId, SEPARATOR, sObjectName});
+        String sObjectKeyPrefix = (Schema.describeSObjects(new List<String>{sObjectName})).get(0).getKeyPrefix();
+        return EncodingUtil.convertToHex(Blob.valueOf(String.format('{0}{1}{2}', new List<Object>{userId, SEPARATOR, sObjectKeyPrefix})));
     }
     
     /**
      * @author Sutharsan Pushparajah
      * @date 19/08/2019
-     * @description extract userId and SObjectName from the compound Id
-     * @param cacheId represents the compound key containing UserId and SObjectName separated by '-'
-     * @return List<String> contains userId and SObjectName
+     * @description extract userId and SObject Key Prefix from the compound Id
+     * @param cacheId represents the compound key containing UserId and SObject Key Prefix separated by '-' in HEX Format
+     * @return List<String> contains userId and SObject Key Prefix
      */
     public static List<String> decomposeCacheId(String cacheId){
-        return cacheId.split(SEPARATOR);
+        return EncodingUtil.convertFromHex(cacheId).toString().split(SEPARATOR);
     }
     
     /**

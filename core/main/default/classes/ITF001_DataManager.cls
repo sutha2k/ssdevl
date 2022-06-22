@@ -5,6 +5,7 @@
  */
 public interface ITF001_DataManager{
     WRP002_QueryBuilder query(WRP002_QueryBuilder queryBuilder);
+    List<SObject> query(String afterSelect, String afterWhere, String finalStatements, Map<String, Object> simpleFilters, Map<String, List<Object>> listFilters);
     List<SObject> queryBy(String fieldsToQuery, String fieldNameToFilter, List<Object> filterParams);
     Map<String, Schema.SObjectField> getFieldsMap();
     String buildSelectClause(Map<String, Schema.SObjectField> fieldsMap);

@@ -17,7 +17,7 @@ private class PIC002_CalloutTracker_TEST {
 
         APU002_Context.bypassEventPublishingInTestContext = false;
 
-        vlocity_cmt.VlocityOpenInterface calloutController = new PIC002_CalloutTracker();
+        PIC002_CalloutTracker calloutController = new PIC002_CalloutTracker();
         Boolean result = calloutController.invokeMethod('', null, null, null);
         System.assertEquals(false, result);
 
