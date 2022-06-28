@@ -9,7 +9,7 @@ public inherited sharing class TST000_TestDataFactory {
     /* Rely on FederationIdentifier to idnetify created user */
     private static final String SSDEVL_STD_USER_FEDID = 'SSDEVL001';
     /* The profile we are sure ton find in any org */
-    private static final String SSDEVL_STD_USER_PROFILE = 'Standard User';
+    private static final String SSDEVL_STD_USER_TYPE = 'Standard';
     /* Permission Set that contains minimum access right */
     private static final String SSDEVL_STD_USER_PERMSET = 'SSDEVL_TEST';
 
@@ -25,14 +25,14 @@ public inherited sharing class TST000_TestDataFactory {
     /**
      * @author Sutharsan Pushparajah
      * @date 20/06/2022
-     * @description create user with Standard Profile and SSDEL_TEST PermissionSet
+     * @description create user with Standard UserType and SSDEL_TEST PermissionSet
      * @return User created user
      */
     public static user createStandardUserForFramework(){
         // Create a unique UserName
         String uniqueUserName = 'standarduser' + DateTime.now().getTime() + '@testorg.com';
         // This code runs as the system user
-        Profile profile = [SELECT Id FROM Profile WHERE Name =: SSDEVL_STD_USER_PROFILE LIMIT 1];
+        Profile profile = [SELECT Id FROM Profile WHERE UserType =: SSDEVL_STD_USER_TYPE AND PermissionsViewSetup = true AND PermissionsPrivacyDataAccess = true ORDER BY CreatedDate ASC LIMIT 1];
 
         User user = new User(Alias = 'standt', Email = 'standarduser@testorg.com',
         EmailEncodingKey = 'UTF-8', LastName = 'Testing', LanguageLocaleKey = 'en_US',
