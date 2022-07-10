@@ -7,7 +7,7 @@
 public inherited sharing class APC002_SObjectInfoCache implements Cache.CacheBuilder{
     
     /* Used to separate userId and sObjectName on a compound string */
-    private static final String SEPARATOR = '-';
+    private static final String SEPARATOR = 'SEP';
     /* SObject schema describer */
     private static Schema.DescribeSObjectResult describeResult;
 
@@ -49,22 +49,22 @@ public inherited sharing class APC002_SObjectInfoCache implements Cache.CacheBui
      * @description Build a compound Id for cache based on userId and SObjectName separated by '-'
      * @param userId Id of the user
      * @param sObjectName API name of the SObject
-     * @return String represents a compound Id for cache based on userId and SObject Key Prefix separated by '-' in HEX format
+     * @return String represents a compound Id for cache based on userId and SObject Key Prefix separated by 'SEP'
      */
     public static String buildCacheId(String userId, String sObjectName){
         String sObjectKeyPrefix = (Schema.describeSObjects(new List<String>{sObjectName})).get(0).getKeyPrefix();
-        return EncodingUtil.convertToHex(Blob.valueOf(String.format('{0}{1}{2}', new List<Object>{userId, SEPARATOR, sObjectKeyPrefix})));
+        return String.format('{0}{1}{2}', new List<Object>{userId, SEPARATOR, sObjectKeyPrefix});
     }
     
     /**
      * @author Sutharsan Pushparajah
      * @date 19/08/2019
      * @description extract userId and SObject Key Prefix from the compound Id
-     * @param cacheId represents the compound key containing UserId and SObject Key Prefix separated by '-' in HEX Format
+     * @param cacheId represents the compound key containing UserId and SObject Key Prefix separated by '-'
      * @return List<String> contains userId and SObject Key Prefix
      */
     public static List<String> decomposeCacheId(String cacheId){
-        return EncodingUtil.convertFromHex(cacheId).toString().split(SEPARATOR);
+        return cacheId.split(SEPARATOR);
     }
     
     /**
@@ -77,8 +77,8 @@ public inherited sharing class APC002_SObjectInfoCache implements Cache.CacheBui
      */
     public static WRP001_UserInfo getFromCache(String userId, String sObjectName){
 
-        if (String.isEmpty(UserInfo.getSessionId())){
-            return getUserInfo(buildCacheId(userId, sObjectName));
+        if (!(Cache.Session.isAvailable() && String.isNotEmpty(UserInfo.getSessionId()))){
+            return getUserInfo(userId);
         }
 
         return (WRP001_UserInfo) Cache.Session.get(APC002_SObjectInfoCache.class, APC000_CoreSetting.coreSetting.SobjectInfoSessionCache__c+'.'+buildCacheId(userId,sObjectName));

@@ -51,7 +51,7 @@ public inherited sharing class APC001_UserInfoCache implements Cache.CacheBuilde
      */
     public static WRP001_UserInfo getFromCache(String userId){
 
-        if (String.isEmpty(UserInfo.getSessionId())){
+        if (!(Cache.Session.isAvailable() && String.isNotEmpty(UserInfo.getSessionId()))){
             return getUserInfo(userId);
         }
 
