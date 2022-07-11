@@ -78,7 +78,7 @@ public inherited sharing class APC002_SObjectInfoCache implements Cache.CacheBui
     public static WRP001_UserInfo getFromCache(String userId, String sObjectName){
 
         if (!(Cache.Session.isAvailable() && String.isNotEmpty(UserInfo.getSessionId()))){
-            return getUserInfo(userId);
+            return getUserInfo(buildCacheId(userId, sObjectName));
         }
 
         return (WRP001_UserInfo) Cache.Session.get(APC002_SObjectInfoCache.class, APC000_CoreSetting.coreSetting.SobjectInfoSessionCache__c+'.'+buildCacheId(userId,sObjectName));
