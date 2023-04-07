@@ -95,18 +95,16 @@ private class EM011_CalloutTracker_TEST {
 
         String value = '01';
 
-        String returnedValue = EM011_CalloutTracker.truncate(value);
+        String returnedValue = EM011_CalloutTracker.truncate(value, 131000);
 
         System.assertEquals(value, returnedValue);
 
-        EM011_CalloutTracker.maxLength = 1;
-        returnedValue = EM011_CalloutTracker.truncate(value);
+        returnedValue = EM011_CalloutTracker.truncate(value, 1);
 
         System.assertEquals('0', returnedValue);
 
-        EM011_CalloutTracker.maxLength = 50;
         value = '$Credentials.UserName';
-        returnedValue = EM011_CalloutTracker.truncate(value);
+        returnedValue = EM011_CalloutTracker.truncate(value, 50);
 
         System.assertEquals('&#x24;Credentials.UserName', returnedValue);
 

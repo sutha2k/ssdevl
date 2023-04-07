@@ -8,8 +8,6 @@ public inherited sharing class APC002_SObjectInfoCache implements Cache.CacheBui
     
     /* Used to separate userId and sObjectName on a compound string */
     private static final String SEPARATOR = 'SEP';
-    /* SObject schema describer */
-    private static Schema.DescribeSObjectResult describeResult;
 
     /**
      * @author Sutharsan Pushparajah
@@ -27,7 +25,7 @@ public inherited sharing class APC002_SObjectInfoCache implements Cache.CacheBui
         String sObjectName = dsr.getName();
 
         WRP001_UserInfo userInfo = APC001_UserInfoCache.getFromCache(userId);
-        userInfo.describeSObjectResult.put(sObjectName, dsr);
+        userInfo.describeSObjectResult.put(sObjectName, fakeId);
         
         return userInfo;
     }
@@ -64,7 +62,7 @@ public inherited sharing class APC002_SObjectInfoCache implements Cache.CacheBui
      * @return List<String> contains userId and SObject Key Prefix
      */
     public static List<String> decomposeCacheId(String cacheId){
-        return cacheId.split(SEPARATOR);
+        return cacheId.split(SEPARATOR);//alphanumeric separaror is mandatory
     }
     
     /**
@@ -78,7 +76,7 @@ public inherited sharing class APC002_SObjectInfoCache implements Cache.CacheBui
     public static WRP001_UserInfo getFromCache(String userId, String sObjectName){
 
         if (!(Cache.Session.isAvailable() && String.isNotEmpty(UserInfo.getSessionId()))){
-            return getUserInfo(buildCacheId(userId, sObjectName));
+            return getUserInfo(buildCacheId(userId, sObjectName));//If in asynchronous transaction or if cache or session isn't available
         }
 
         return (WRP001_UserInfo) Cache.Session.get(APC002_SObjectInfoCache.class, APC000_CoreSetting.coreSetting.SobjectInfoSessionCache__c+'.'+buildCacheId(userId,sObjectName));

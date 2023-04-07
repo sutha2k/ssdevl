@@ -19,10 +19,9 @@ private class WRP001_UserInfo_TEST{
         
         Test.startTest();
         
-        WRP001_UserInfo userInfo = new WRP001_UserInfo(user, schemaMap);
+        WRP001_UserInfo userInfo = new WRP001_UserInfo(user);
         
         System.assertEquals(user.Id, userInfo.user.Id);
-        System.assertNotEquals(null, userInfo.schemaMap);
         System.assertNotEquals(null, userInfo.describeSObjectResult);
         
         Test.stopTest();

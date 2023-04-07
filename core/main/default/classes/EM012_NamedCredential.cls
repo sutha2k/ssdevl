@@ -5,13 +5,12 @@
  */
 public inherited sharing class EM012_NamedCredential {
 
-    public static ITF001_DataManager datamanager = new DM001_SObjectInstance(SObjectType.NamedCredential.Name, 'EM012_NamedCredential');
     public static Map<String, String> endpointByName = new Map<String, String>();
 
     static {
-        WRP002_QueryBuilder wrpQuery = new WRP002_QueryBuilder('Id, DeveloperName, Endpoint', null, null);
-        wrpQuery = datamanager.query(wrpQuery);
-        for (NamedCredential named : (List<NamedCredential>) wrpQuery.results){
+        List<NamedCredential> results = new List<NamedCredential>([select Id, DeveloperName, Endpoint from NamedCredential WITH SYSTEM_MODE]);
+        
+        for (NamedCredential named : results){
             endpointByName.put(named.DeveloperName.toLowerCase(), named.Endpoint);
         }
     }

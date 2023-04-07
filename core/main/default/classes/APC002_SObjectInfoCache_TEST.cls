@@ -55,20 +55,19 @@ private class APC002_SObjectInfoCache_TEST{
         WRP001_UserInfo userInfo = APC002_SObjectInfoCache.getFromCache(userId, sObjectName);
         System.assertNotEquals(null, userInfo);
         System.assertEquals(userId, userInfo.user.Id);
-        System.assertNotEquals(null, userInfo.schemaMap);
         
-        Map<String, Schema.DescribeSObjectResult> describer = userInfo.describeSObjectResult;
+        Map<String, Id> describer = userInfo.describeSObjectResult;
         System.assertNotEquals(null, describer);
         
-        Schema.DescribeSObjectResult result = describer.get(sObjectName);
-        System.assertNotequals(null, result);
-        System.assertequals(sObjectName, result.getName());
+        Id result = describer.get(sObjectName);
+        System.assertNotEquals(null, result);
 
         //Testing access for 2nd Object
         userInfo = APC002_SObjectInfoCache.getFromCache(userId, 'Account');
         describer = userInfo.describeSObjectResult;
-        result = describer.get('Account');
-        System.assertequals('Account', result.getName());
+        Id result2 = describer.get('Account');
+        System.assertNotEquals(null, result2);
+        System.assertNotEquals(result, result2);
         
         Test.stopTest();
     }

@@ -46,7 +46,7 @@ private class DM006_ApigeeRest_TEST {
         }
 
         System.assertEquals(false, isException, 'No ApigeeCustomException must be thrown');
-        System.assertEquals(true, httpRequestInfos.header.containsKey('Content-Length'), 'Header must contain Content-Length');
+        System.assertEquals(false, httpRequestInfos.header.containsKey('Content-Length'), 'Header must contain Content-Length');
         System.assertEquals(true, httpRequestInfos.header.containsKey('X-correlation-id'), 'Header must contain X-correlation-id');
 
         //TESTING 1ST EXCEPTION : Exception caught

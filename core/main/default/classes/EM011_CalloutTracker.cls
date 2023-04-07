@@ -6,7 +6,9 @@
 public inherited sharing class EM011_CalloutTracker {
     
     /* Truncate field String if beyond */
-    public static Integer maxLength = 131000;
+    private static final Integer MAX_LENGTH_LONG_TEXT_AREA = 131000;
+    private static final Integer MAX_LENGTH_TEXT_AREA = 31000;
+    private static final Integer MAX_LENGTH_TEXT = 254; 
 
     /**
      * @author Sutharsan Pushparajah
@@ -30,20 +32,20 @@ public inherited sharing class EM011_CalloutTracker {
         CalloutTracker__e calloutTracker = new CalloutTracker__e();
         calloutTracker.TransactionId__c = transactionId;
         calloutTracker.ServiceId__c = serviceId;
-        calloutTracker.Headers__c = JSON.serialize(wrpRequest.header);
+        calloutTracker.Headers__c = truncate(JSON.serialize(wrpRequest.header), MAX_LENGTH_TEXT_AREA);
         calloutTracker.HttpMethod__c = wrpRequest.requestType;
-        calloutTracker.Resource__c = resource;
-        calloutTracker.Endpoint__c = wrpRequest.endPoint;
-        calloutTracker.QueryParameters__c = wrpRequest.queryParameters;
+        calloutTracker.Resource__c = truncate(resource, MAX_LENGTH_TEXT);
+        calloutTracker.Endpoint__c = truncate(wrpRequest.endPoint, MAX_LENGTH_TEXT);
+        calloutTracker.QueryParameters__c = truncate(wrpRequest.queryParameters, MAX_LENGTH_TEXT);
         calloutTracker.Timeout__c = wrpRequest.timeout;
         calloutTracker.StartTime__c = startTime;
         calloutTracker.EndTime__c = endTime;
         calloutTracker.UserId__c = userId;
         calloutTracker.Username__c = userName;
-        calloutTracker.Message__c = message;
+        calloutTracker.Message__c = truncate(message, MAX_LENGTH_TEXT_AREA);
 
         if (wrpRequest.httpResponse != null){
-            calloutTracker.Status__c = wrpRequest.httpResponse.getStatus();
+            calloutTracker.Status__c = truncate(wrpRequest.httpResponse.getStatus(), MAX_LENGTH_TEXT);
             calloutTracker.StatusCode__c = wrpRequest.httpResponse.getStatusCode();
         }
 
@@ -60,11 +62,11 @@ public inherited sharing class EM011_CalloutTracker {
         }
 
         if (wrpRequest.soapRequest == null){
-            calloutTracker.Request__c = truncate(requestStr);
-            calloutTracker.Response__c = truncate(responseStr);
+            calloutTracker.Request__c = truncate(requestStr, MAX_LENGTH_LONG_TEXT_AREA);
+            calloutTracker.Response__c = truncate(responseStr, MAX_LENGTH_LONG_TEXT_AREA);
         } else {
-            calloutTracker.Request__c = truncate(wrpRequest.soapRequest+requestStr);
-            calloutTracker.Response__c = truncate(wrpRequest.soapResponse+responseStr);
+            calloutTracker.Request__c = truncate(wrpRequest.soapRequest+requestStr, MAX_LENGTH_LONG_TEXT_AREA);
+            calloutTracker.Response__c = truncate(wrpRequest.soapResponse+responseStr, MAX_LENGTH_LONG_TEXT_AREA);
         }
 
         return calloutTracker;
@@ -74,9 +76,11 @@ public inherited sharing class EM011_CalloutTracker {
      * @date 22/09/2021
      * @description truncate and return the string representation of the object 
      * @param value object to transform/truncate into string
+     * @param maxLength maximum length allowed
+     * @return substring to respect max length
      */
     @testVisible
-    private static String truncate(Object value){
+    private static String truncate(Object value, Integer maxLength){
         String temp = null;
 
         if (value != null){

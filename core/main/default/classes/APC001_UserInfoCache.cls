@@ -6,8 +6,6 @@
  */
 public inherited sharing class APC001_UserInfoCache implements Cache.CacheBuilder{
      
-    /* Schema describer */
-    private static Map<String, Schema.SObjectType> globalDescribe;
     /* Contextual user */
     private static User user;
 
@@ -19,14 +17,13 @@ public inherited sharing class APC001_UserInfoCache implements Cache.CacheBuilde
      * @return WRP001_UserInfo represents information to get from database by using userId
      */
     public static WRP001_UserInfo getUserInfo(String userId) {
-        
-        if (user == null || globalDescribe == null){
+
+        if (user == null){
             //REMOVING Security check to handle community user who do not have permisisons
-            APC001_UserInfoCache.user = (User)[SELECT Id, Name, IsActive, Username, ProfileId, UserRoleId FROM User WHERE id = :userid /*WITH SECURITY_ENFORCED*/];
-            APC001_UserInfoCache.globalDescribe = Schema.getGlobalDescribe();
+            APC001_UserInfoCache.user = (User)[SELECT Id, Name, IsActive, Username, ProfileId, UserRoleId FROM User WHERE id = :userid WITH SYSTEM_MODE];
         }
         
-        WRP001_UserInfo wrp = new WRP001_UserInfo(APC001_UserInfoCache.user, APC001_UserInfoCache.globalDescribe); 
+        WRP001_UserInfo wrp = new WRP001_UserInfo(APC001_UserInfoCache.user); 
 
         return wrp;
     }

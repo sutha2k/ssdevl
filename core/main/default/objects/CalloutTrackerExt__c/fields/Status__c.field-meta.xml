@@ -4,7 +4,7 @@
     <description>Http Request status</description>
     <externalId>false</externalId>
     <label>Status</label>
-    <length>40</length>
+    <length>255</length>
     <required>false</required>
     <trackTrending>false</trackTrending>
     <type>Text</type>

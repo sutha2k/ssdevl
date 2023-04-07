@@ -101,7 +101,7 @@ public inherited sharing abstract class DM000_SObject {
         this.sObjectName = sObjectName;
         this.entityClassName = entityClassName;
         wrpUserInfo = APC002_SObjectInfoCache.getFromCache(UserInfo.getUserId(), sObjectName);
-        describeResult = wrpUserInfo.describeSObjectResult.get(sObjectName);
+        describeResult = wrpUserInfo.describeSObjectResult.get(sObjectName).getSobjectType().getDescribe();
     }
      
     /**
@@ -336,7 +336,7 @@ public inherited sharing abstract class DM000_SObject {
      */
     private void executeQuery(WRP002_QueryBuilder queryBuilder, String soqlQuery){
 
-        if (!APU002_Context.isWithSchemaDescriber() || (describeResult.isAccessible() && describeResult.isQueryAble())){
+        if (!APU002_Context.isWithSchemaDescriber() || (describeResult != null && describeResult.isAccessible() && describeResult.isQueryAble())){
             APU000_Logger.log(LoggingLevel.DEBUG, entityClassName, 'query', String.format('SOQL={0}',new List<Object>{soqlQuery}));
         
             if (!queryBuilder.isAggregateResults){
@@ -450,7 +450,7 @@ public inherited sharing abstract class DM000_SObject {
      * @return List<Database.SaveResult> results of the insert DML operation
      */
     public virtual List<Database.SaveResult> insertList(List<SObject> sObjectList, Boolean allOrNone){
-        if (sObjectList == null ||  sObjectList.isEmpty() || (APU002_Context.isWithSchemaDescriber() && (!describeResult.isAccessible() || !describeResult.isCreateable()))){
+        if (sObjectList == null ||  sObjectList.isEmpty() || (APU002_Context.isWithSchemaDescriber() && describeResult != null && (!describeResult.isAccessible() || !describeResult.isCreateable()))){
             return new List<Database.SaveResult>();
         }
 
@@ -466,7 +466,7 @@ public inherited sharing abstract class DM000_SObject {
      * @return List<Database.UpsertResult> results of the upsert DML operation
      */
     public virtual List<Database.UpsertResult> upsertList(List<SObject> sObjectList, Schema.SObjectField externalIdField){
-        if (sObjectList == null ||  sObjectList.isEmpty() || (APU002_Context.isWithSchemaDescriber() && (!describeResult.isAccessible() || !describeResult.isCreateable() || !describeResult.isUpdateable()))){
+        if (sObjectList == null ||  sObjectList.isEmpty() || (APU002_Context.isWithSchemaDescriber() && describeResult != null && (!describeResult.isAccessible() || !describeResult.isCreateable() || !describeResult.isUpdateable()))){
             return new List<Database.UpsertResult>();
         }
         
@@ -485,7 +485,7 @@ public inherited sharing abstract class DM000_SObject {
      * @return List<Database.SaveResult> results of the update DML operation
      */
     public virtual List<Database.SaveResult> updateList(List<SObject> sObjectList, Boolean allOrNone){
-        if (sObjectList == null ||  sObjectList.isEmpty() || (APU002_Context.isWithSchemaDescriber() && (!describeResult.isAccessible() || !describeResult.isUpdateable()))){
+        if (sObjectList == null ||  sObjectList.isEmpty() || (APU002_Context.isWithSchemaDescriber() && describeResult != null &&  (!describeResult.isAccessible() || !describeResult.isUpdateable()))){
             return new List<Database.SaveResult>();
         }
          
@@ -501,7 +501,7 @@ public inherited sharing abstract class DM000_SObject {
      * @return List<Database.DeleteResult> results of the delete DML operation
      */
     public virtual List<Database.DeleteResult> deleteList(List<SObject> sObjectList, Boolean allOrNone){
-        if (sObjectList == null ||  sObjectList.isEmpty() || (APU002_Context.isWithSchemaDescriber() && (!describeResult.isAccessible() || !describeResult.isDeletable()))){
+        if (sObjectList == null ||  sObjectList.isEmpty() || (APU002_Context.isWithSchemaDescriber() && describeResult != null &&  (!describeResult.isAccessible() || !describeResult.isDeletable()))){
             return new List<Database.DeleteResult>();
         }
         

@@ -6,10 +6,8 @@
 public inherited sharing class WRP001_UserInfo{
     /* Current user */
     public User user;
-    /* Schema Global Description */
-    public Map<String, Schema.SObjectType> schemaMap;
     /* Schema SObject Description */
-    public Map<String, Schema.DescribeSObjectResult> describeSObjectResult;
+    public Map<String, Id> describeSObjectResult;
     
    /**
     * @author Sutharsan Pushparajah
@@ -18,9 +16,8 @@ public inherited sharing class WRP001_UserInfo{
     * @param user current user
     * @param schemaMap Schema description
     */
-    public WRP001_UserInfo(User user, Map<String, Schema.SObjectType> schemaMap){
+    public WRP001_UserInfo(User user){
         this.user = user;
-        this.schemaMap = schemaMap;
-        describeSObjectResult = new Map<String, Schema.DescribeSObjectResult>();
+        describeSObjectResult = new Map<String, Id>();
     }
 }

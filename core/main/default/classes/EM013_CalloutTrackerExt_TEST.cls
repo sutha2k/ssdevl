@@ -18,8 +18,14 @@ private class EM013_CalloutTrackerExt_TEST {
      */
     @isTest
     private static void testTrackCalloutIP(){
+        
+        String transactionId;
+        
         Test.startTest();
 
+        //New behavior SPRING23: Static variables are reset when called in multi user / flow context, do not persist anymore globally into whole transaction
+        transactionId = APU002_Context.TRANSACTION_GUID;
+        
         System.runAs(TST000_TestDataFactory.getStandardUserForFramework()){
             APU002_Context.bypassEventPublishingInTestContext = false;
 
@@ -60,7 +66,7 @@ private class EM013_CalloutTrackerExt_TEST {
             System.assertEquals('OK', ctext.Status__c); 
             System.assertEquals(200, ctext.StatusCode__c);
             System.assertEquals(120000, ctext.Timeout__c);
-            System.assertEquals(APU002_Context.TRANSACTION_GUID, ctext.TransactionId__c);
+            System.assertEquals(transactionId, ctext.TransactionId__c);
             System.assertEquals(UserInfo.getUserId(), ctext.UserId__c);
             System.assertEquals(UserInfo.getUserName(), ctext.Username__c);
 

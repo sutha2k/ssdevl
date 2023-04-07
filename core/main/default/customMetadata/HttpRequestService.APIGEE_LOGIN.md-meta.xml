@@ -27,6 +27,10 @@
         <value xsi:type="xsd:string">/oauth2/v1/token</value>
     </values>
     <values>
+        <field>SecondaryCustomHeaders__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
         <field>SecondaryNamedEndpoint__c</field>
         <value xsi:nil="true"/>
     </values>

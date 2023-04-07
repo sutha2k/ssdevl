@@ -52,11 +52,13 @@ public inherited sharing class WRP003_HttpRequest {
      */
     public void buildRequest(HttpRequestService__mdt requestService){
         httpRequest = new HttpRequest();
-
+        
         if (requestService != null){
+            Boolean useSecondaryEndpoint = requestService.ForceSecondaryEndpoint__c || FeatureManagement.checkPermission(requestService.BypassPrimaryEndpointPermission__c);
+            
             endpoint = requestService.PrimaryNamedEndpoint__c;
             
-            if (requestService.ForceSecondaryEndpoint__c || FeatureManagement.checkPermission(requestService.BypassPrimaryEndpointPermission__c)){
+            if (useSecondaryEndpoint){
                 endpoint = requestService.SecondaryNamedEndpoint__c;
             }
                 
@@ -68,9 +70,17 @@ public inherited sharing class WRP003_HttpRequest {
 
             timeout = Integer.valueOf(requestService.Timeout__c);
             
-            if (String.isNotEmpty(requestService.CustomHeaders__c)){
-             	Map<String, String> customHeaders = (Map<String, String>) JSON.deserialize(requestService.CustomHeaders__c, Map<String, String>.class);
-                header.putAll(customHeaders);
+            if (useSecondaryEndpoint){
+                header.remove('Content-Length');//not compatible
+                if (String.isNotEmpty(requestService.SecondaryCustomHeaders__c)){
+                    Map<String, String> secondaryCustomHeaders = (Map<String, String>) JSON.deserialize(requestService.SecondaryCustomHeaders__c, Map<String, String>.class);
+                    header.putAll(secondaryCustomHeaders);
+            	}
+            } else {
+                if (String.isNotEmpty(requestService.CustomHeaders__c)){
+             		Map<String, String> customHeaders = (Map<String, String>) JSON.deserialize(requestService.CustomHeaders__c, Map<String, String>.class);
+                	header.putAll(customHeaders);
+            	}
             }
             
             if (Test.isRunningTest()){

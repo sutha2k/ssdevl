@@ -25,6 +25,10 @@
     <values>
         <field>Resource__c</field>
         <value xsi:type="xsd:string">/mock</value>
+	</values>
+    <values>
+        <field>SecondaryCustomHeaders__c</field>
+        <value xsi:type="xsd:string">{&quot;testheader&quot;:&quot;testvalue&quot;}</value>
     </values>
     <values>
         <field>SecondaryNamedEndpoint__c</field>

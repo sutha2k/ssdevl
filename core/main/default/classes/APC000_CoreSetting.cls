@@ -15,44 +15,37 @@ public inherited sharing class APC000_CoreSetting{
     static {
         CoreSetting__mdt mockCoreSetting;
         String orgId = UserInfo.getOrganizationId();
-        //REMOVING to handle community user who do not have permisisons 
-        //Schema.DescribeSObjectResult describer = CoreSetting__mdt.SObjectType.getDescribe();
+        
+        List<CoreSetting__mdt> coreSettingList = new List<CoreSetting__mdt>([select BypassAllTriggerPermission__c, DeveloperName,
+                                                    CoreTriggerManagerClass__c, IsActive__c, IsDefault__c, 
+                                                    OrgId__c, RecursionLevel__c,
+                                                    SobjectInfoSessionCache__c, UserInfoSessionCache__c,
+                                                    WithSecurityEnforced__c, WithStripInaccessible__c, WithSchemaDescriber__c,
+                                                    BypassSchemaDescriberPermission__c, BypassStripinaccessiblePermission__c, BypassWithSecurityPermission__c,
+                                                    LoggingEnabled__c, EnableLoggingPermission__c, LoggingEventEnabled__c, EnableLoggingEventPermission__c, 
+                                                    CalloutTrackingEnabled__c, EnableCalloutTrackingPermission__c
+                                                    from CoreSetting__mdt 
+                                                    where IsActive__c = true WITH SYSTEM_MODE]);
 
-        /*if (describer.isAccessible() && describer.isQueryAble()){*/
-            List<CoreSetting__mdt> coreSettingList = [select BypassAllTriggerPermission__c, DeveloperName,
-                                                            CoreTriggerManagerClass__c, IsActive__c, IsDefault__c, 
-                                                            OrgId__c, RecursionLevel__c,
-                                                            SobjectInfoSessionCache__c, UserInfoSessionCache__c,
-                                                            WithSecurityEnforced__c, WithStripInaccessible__c, WithSchemaDescriber__c,
-                                                            BypassSchemaDescriberPermission__c, BypassStripinaccessiblePermission__c, BypassWithSecurityPermission__c,
-                                                            LoggingEnabled__c, EnableLoggingPermission__c, LoggingEventEnabled__c, EnableLoggingEventPermission__c, 
-                                                            CalloutTrackingEnabled__c, EnableCalloutTrackingPermission__c
-                                                            from CoreSetting__mdt 
-                                                            where IsActive__c = true /*WITH SECURITY_ENFORCED*/];
-
-            /*SObjectAccessDecision decision = Security.stripInaccessible(AccessType.READABLE, coreSettingList);
-            coreSettingList = (List<CoreSetting__mdt>) decision.getRecords();*/
-
-            for (CoreSetting__mdt cs : coreSettingList){
-                if (cs.DeveloperName == MOCK_CORE_SETTING){
-                    mockCoreSetting = cs;
-                }
-
-                if (cs.IsActive__c){
-                    if (orgId == cs.orgId__c){
-                        coreSetting = cs;
-                        break;
-                    } else if (cs.IsDefault__c){
-                        //Keep the default one if setting is not found for current org 
-                        coreSetting = cs;
-                    }
-                }
+        for (CoreSetting__mdt cs : coreSettingList){
+            if (cs.DeveloperName == MOCK_CORE_SETTING){
+                mockCoreSetting = cs;
             }
 
-            //To validate test unit, we replace the core setting with the one used in test context and ensure that previous lines are covered
-            if (Test.isRunningTest()){
-                coreSetting = mockCoreSetting;
+            if (cs.IsActive__c){
+                if (orgId == cs.orgId__c){
+                    coreSetting = cs;
+                    break;
+                } else if (cs.IsDefault__c){
+                    //Keep the default one if setting is not found for current org 
+                    coreSetting = cs;
+                }
             }
-        /*}*/
+        }
+
+        //To validate test unit, we replace the core setting with the one used in test context and ensure that previous lines are covered
+        if (Test.isRunningTest()){
+            coreSetting = mockCoreSetting;
+        }
     }
 }

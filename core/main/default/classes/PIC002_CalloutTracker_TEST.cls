@@ -27,6 +27,21 @@ private class PIC002_CalloutTracker_TEST {
         Map<String, Object> input = new Map<String, Object>{APU000_Logger.SERVICE_NAME => 'TestingMockService', APU000_Logger.METHOD => 'POST'};
         result = calloutController.invokeMethod(PIC002_CalloutTracker.METHOD_NAME, input, null, null);
         System.assertEquals(true, result);
+        
+        input = new Map<String, Object>{APU000_Logger.SERVICE_NAME => 'TestingMockService', APU000_Logger.METHOD => 'POST', 'startTime' => Datetime.now(), 'requestNode' => 'test', 'responseNode' => 'test'};
+        Map<String, Object> commonNode = new Map<String, Object>{'TrackCalloutCommon' => input};
+            
+        result = calloutController.invokeMethod(PIC002_CalloutTracker.METHOD_NAME_V2, commonNode, null, null);
+        System.assertEquals(true, result);
+        
+        Map<String, Object> statusNode = new Map<String, Object>{'status' => 'OK', 'statusCode' => 200};
+        input = new Map<String, Object>{APU000_Logger.SERVICE_NAME => 'TestingMockService', APU000_Logger.METHOD => 'POST', 'startTime' => Datetime.now(), 'requestNode' => 'test', 'responseNode' => 'test'};
+        input.put('statusNode', 'statusNode');
+        commonNode = new Map<String, Object>{'TrackCalloutCommon' => input};
+        commonNode.put('statusNode', statusNode);
+            
+        result = calloutController.invokeMethod(PIC002_CalloutTracker.METHOD_NAME_V2, commonNode, null, null);
+        System.assertEquals(true, result);
 
         APU002_Context.bypassEventPublishingInTestContext = true;
 

@@ -21,6 +21,11 @@ public inherited sharing class APU000_Logger{
     public static final String REQUEST = 'request';
     /* key to retrieve the full reponse */
     public static final String RESPONSE = 'response';
+    /* key to retrieve startTime */
+    public static final String START_TIME = 'startTime';
+    /* key to retrieve endTime */
+    public static final String END_TIME = 'endTime';
+    
 
     /** 
      * @author Sutharsan Pushparajah
@@ -137,7 +142,17 @@ public inherited sharing class APU000_Logger{
             //Getting common static parameters
             HttpRequestService__mdt requestService = HttpRequestService__mdt.getInstance((String) input.get(SERVICE_NAME));
             Datetime startTime = Datetime.now();
+            
+            if (input.get(START_TIME) != null){
+                startTime = (Datetime) input.get(START_TIME);
+            }
+            
             Datetime endTime = Datetime.now();
+            
+            if (input.get(START_TIME) != null){
+                endTime = (Datetime) input.get(END_TIME);
+            }
+            
             String message = String.valueOf(input.get(MESSAGE));
 
             //Setting Request paramters

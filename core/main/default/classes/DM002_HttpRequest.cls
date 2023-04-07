@@ -35,7 +35,7 @@ public inherited sharing abstract class DM002_HttpRequest {
             startTime = System.now();
             httpRequestInfos.httpResponse = new Http().send(httpRequestInfos.httpRequest);
         } catch (Exception exp){
-            httpRequestInfos.theException = exp;
+           	httpRequestInfos.theException = exp;
             message = exp.getMessage();
             APU000_Logger.log(LoggingLevel.ERROR, 'DM002_HttpRequest', 'executeHttpRequest', message);
         }  finally {
